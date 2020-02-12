@@ -1,0 +1,118 @@
+.hide {
+  display:none !important;
+}
+
+
+input, select {
+  font-size: 16px;
+}
+input, select, button {
+  line-height: 2;
+}
+.i,
+i {
+  font-style: initial !important;
+}
+
+.sp-title span{
+  line-height: 1.2;
+}
+.content p {
+  line-height: 2;
+}
+.content p + p {
+  margin-top: 20px;
+}
+
+.form-field.select-field {
+  display: none;
+}
+.text-field label, .select-field label {
+  font-size: 16px;
+}
+.checkbox-field label {
+  font-size: 11px;
+}
+.details--wrapper {
+  position: relative;
+}
+#voting .close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
+.highlight{
+  color:#afffa0;
+  font-size: 1.4vw;
+}
+
+.voting .left-col .out {
+  text-align: left;
+}
+
+#form {
+  overflow-y: auto;
+}
+#form .you-can {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 1rem;
+  line-height: normal;
+
+  .number {
+    color: #BEDCB1;
+    font-size: 4rem;
+    margin-right: 0.5rem;
+  }
+
+  .text-part {
+    font-size: 1.3rem;
+  }
+}
+
+// loading
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#chart .lds-dual-ring {
+  margin-top: 20vh;
+}
+
+@media (min-width: 1000px) {
+  #voting .left-col p {
+    padding: 0 30px;
+  }
+}
+@media only screen and (max-width: 999px) {
+  #voting, #form, #result {
+    padding-top: 60px;
+  }
+  #sticky_widget {
+    display: none;
+  }
+}

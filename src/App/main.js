@@ -1,56 +1,54 @@
 import './all.css'
-import './main.css'
-
-// import * as $ from 'jquery'
-// import jquery_validation from 'jquery-validation'
-// import Cookies from 'js-cookie'
-// import autosize from 'autosize'
-// import anime from 'animejs/lib/anime.es.js';
-// import Highcharts from 'highcharts';
-
-import "./static/plugins.1.js"
-import "./static/plugins.2.js"
+import './main.scss'
 
 const {$, anime, autosize, Cookies, Highcharts} = window
+const apiUrl = "https://cors-anywhere.arpuli.com/https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec"
+// const apiUrl = "https://script.google.com/macros/s/AKfycbzRtGHGwTYjnzTUbYsSJSbWtYh7D47qGaSbLg-CeLq4v6xwWLI/exec" // test project
 
-var base_url = 'https://dev.do2.documentonready.com/greenpeace-ipcc/';
-var options_id = 'en__field_supporter_questions_288643';
+var options_id = 'en__field_supporter_questions_288643'; // 選擇關心議題的 id
+
 var free_text_id = 'en__field_supporter_questions_288644';
-var email_optin_id = 'en__field_supporter_questions_2738';
+
+
+var email_optin_id = 'en__field_supporter_questions_7275';
 var nro_data_ok_id = '';
 
-var resultData = []
+var base_url = 'https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1735/';  //cdn url
+var resultData = [
+	// 'name', 'y', 'sliced', 'selected', 'color.pattern.image', 'color.pattern.aspectRatio'
+	["政府訂定更積極的減碳目標"	,25, false, false, base_url+'1.jpg', 1],
+	["政府應該加速淘汰燃煤電廠"	,25, false, false, base_url+'2.jpg', 1],
+	["提出中長期再生能源發展目標"	,25, false, false, base_url+'3.jpg', 1],
+	["政府要求用電大戶負起綠能責任"	,15, false, false, base_url+'4.jpg', 1],
+	["高耗能企業擔起減碳責任"	,15, false, false, base_url+'5.jpg', 1],
+	["企業提供氣候變遷風險評估"	,25, false, false, base_url+'6.jpg', 1],
+	["從高污染產業逐步撤資"	,25, false, false, base_url+'7.jpg', 1],
+]
 
-$(() => {
-	console.log('DOM.ready')
-})
+Object.assign($.validator.messages, {
+	required: "此項為必填"
+});
 
-// $.extend($.validator.messages, {
-// 	required: "此項為必填",
-// });
+/**
+ * Resolve the en page status by checking the pageJson
+ *
+ * @return {string} FRESH | SUCC | ERROR
+ */
+const resolveEnPagePetitionStatus = () => {
+	let status = "FRESH";
 
-$(function () {
-	$('.next-btn').click(function () {
-		console.log('Vote');
+	if (window.pageJson.pageNumber === 2) {
+		status = "SUCC"; // succ page
+	} else {
+		status = "FRESH"; // start page
+	}
 
-		// $('#voting .option .vote-btn.checked').each(function(k,v) {
-		// 	var title = $(v).data('title');
-		// 	console.log(title);
-		// 	ga('send', 'event', 'ipcc_reason', 'vote', title);
-		// });
-
-		// fbq('track', 'ViewContent', {
-		// 	content_name: '2018-ipcc',
-		// 	content_category: 'IPCCVoteForReasons'
-		// });
-
-	});
-
-})
+	return status;
+};
 
 $(function(){
 	var scrollTo= function(t, s){
-	  $("html, body").stop().animate({scrollTop:t}, s, 'swing', function() { });
+		$("html, body").stop().animate({scrollTop:t}, s, 'swing', function() { });
 	},
 	pageHandler = {
 		goTo: function(to, from){
@@ -132,20 +130,55 @@ $(function(){
 				e.preventDefault();
 				_.showDetail($(this));
 			});
+
+			// handle click submit voting
 			_.$container.find('.next-btn').click(function(e){
 				e.preventDefault();
 
-				$('#voting .option .vote-btn.checked').each(function(k,v) {
+				// collect picked options
+				let chosens = []
+				_.$container.find('.vote-btn.checked').each(function(k,v) {
 					var title = $(v).data('title')
 					window.dataLayer.push({'event': title});
+					chosens.push(title)
 				});
 
+				// send the request to server
+				fetch(apiUrl+"?sheetName=votes", {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						rows: [
+							{
+								ip:ip,
+								choosen_1: chosens.length>0 ? chosens[0] : "",
+								choosen_2: chosens.length>1 ? chosens[1] : "",
+								choosen_3: chosens.length>2 ? chosens[2] : "",
+							}
+						]
+					})
+				})
+				.then(() => {
+					resultPage.fetchChartData()
+				})
+
+				// save the selection to localStorage
+				localStorage.setItem('choosed_options', JSON.stringify(chosens));
+
+				// go to next page
 				pageHandler.goTo('#form', '#voting');
+
 			}).end().find('.typing-btn').click(function(e){
 				e.preventDefault();
 				_.showTyping();
 			});
+
+			// auto-height the textarea
 			autosize($('#typing-panel textarea').get(0));
+
+			// bind submit event for the typing-panel
 			$('#type-next-btn').click(function(e){
 				e.preventDefault();
 				var text = $.trim($('#typing-panel textarea').val());
@@ -153,6 +186,18 @@ $(function(){
 					_.resetTyping();
 					$('#'+free_text_id).val(text);
 					window.dataLayer.push({'custom_vote': text});
+
+					// send to server
+					fetch(apiUrl+"?sheetName=notes", {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							rows: [{ip:ip, message: text}]
+						})
+					})
+
 					pageHandler.goTo('#form', '#voting');
 				}
 				else{
@@ -207,56 +252,56 @@ $(function(){
 			var votingTimeline = anime.timeline({
 				easing: 'easeOutQuart',
 				complete: function(anim) {
-				  votingPage.active = true;
-				  $('body').removeClass('intro');
-			      resolve();
-			    }
+					votingPage.active = true;
+					$('body').removeClass('intro');
+						resolve();
+					}
 			});
 
 			votingTimeline
-			  .add({
-			    targets: '#voting',
-			    opacity: 1,
-			    duration: 200
-			  }).add({
-			    targets: '#voting .sp-title .word',
-			    translateY: [30, 0],
-			    rotate: ['.02turn', '-0turn'],
-			    opacity:[0,1],
-			    duration: 700,
-			    delay: function(el, i, l) {
-			      return (i * 25);
-			    },
-			    offset: 0,
-			  })
-			  .add({
-			    targets: '#voting .left-col .out',
-			    translateY: [60, 0],
-			    opacity:[0,1],
-			    duration: 700,
-			    delay: function(el, i, l) {
-			      return 300+(i * 25);
-			    },
-			    offset: '-=850' // Starts 600ms before the previous animation ends
-			  })
-			  .add({
-			    targets: '#voting .options .out',
-				  translateY: [90, 0],
-				  opacity:[0,1],
-				  delay: function(el, i, l) {
-				    return (i * 115);
-				  },
-			    offset: '-=550' // Starts 800ms before the previous animation ends
-			  }).add({
-			    targets: '#voting .option .title',
-				  translateY: [30, 0],
-				  opacity: [0, 1],
-				  duration: 700,
-				  delay: function(el, i, l) {
-				    return (i * 115);
-				  },
-			      offset: 750 // Starts 800ms before the previous animation ends
-			  });
+				.add({
+					targets: '#voting',
+					opacity: 1,
+					duration: 200
+				}).add({
+					targets: '#voting .sp-title .word',
+					translateY: [30, 0],
+					rotate: ['.02turn', '-0turn'],
+					opacity:[0,1],
+					duration: 700,
+					delay: function(el, i, l) {
+						return (i * 25);
+					},
+					offset: 0,
+				})
+				.add({
+					targets: '#voting .left-col .out',
+					translateY: [60, 0],
+					opacity:[0,1],
+					duration: 700,
+					delay: function(el, i, l) {
+						return 300+(i * 25);
+					},
+					offset: '-=850' // Starts 600ms before the previous animation ends
+				})
+				.add({
+					targets: '#voting .options .out',
+					translateY: [90, 0],
+					opacity:[0,1],
+					delay: function(el, i, l) {
+						return (i * 115);
+					},
+					offset: '-=550' // Starts 800ms before the previous animation ends
+				}).add({
+					targets: '#voting .option .title',
+					translateY: [30, 0],
+					opacity: [0, 1],
+					duration: 700,
+					delay: function(el, i, l) {
+						return (i * 115);
+					},
+						offset: 750 // Starts 800ms before the previous animation ends
+				});
 
 			});
 		},
@@ -264,13 +309,13 @@ $(function(){
 			return new Promise((resolve, reject) => {
 				votingPage.active = false;
 				 anime({
-				  targets: '#voting',
-				  opacity: [1, 0],
-				  easing: 'easeInOutExpo',
-				  duration: 400,
-				  complete: function(){
-				  	resolve();
-				  }
+					targets: '#voting',
+					opacity: [1, 0],
+					easing: 'easeInOutExpo',
+					duration: 400,
+					complete: function(){
+						resolve();
+					}
 				});
 			});
 		}
@@ -305,12 +350,12 @@ $(function(){
 				pageHandler.goTo('#voting', '#form');
 			});
 			$.validator.addMethod( //override email with django email validator regex - fringe cases: "user@admin.state.in..us" or "name@website.a"
-		        'email',
-		        function(value, element){
-		            return this.optional(element) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/i.test(value);
-		        },
-		        'Please enter valid email.'
-		    );
+						'email',
+						function(value, element){
+								return this.optional(element) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/i.test(value);
+						},
+						'Email 格式錯誤'
+				);
 			$("#fake-form").validate({
 				errorPlacement: function(error, element) {
 					element.parents("div.form-field:first").after( error );
@@ -323,7 +368,9 @@ $(function(){
 						var id = $(v).data('id');
 						temp.push(id);
 					});
-					Cookies.set('checked_options', temp);
+
+					// Cookies.set('checked_options', temp);
+					console.log('en__field_supporter_questions_288643', temp.join())
 					$('#'+options_id).val(temp.join());
 					$('#en__field_supporter_firstName').val($('#fake_supporter_firstName').val());
 					$('#en__field_supporter_lastName').val($('#fake_supporter_lastName').val());
@@ -349,7 +396,7 @@ $(function(){
 						var message = errors == 1
 							? 'You missed 1 field. It has been highlighted'
 							: 'You missed ' + errors + ' fields. They have been highlighted';
-						alert(message);
+						// alert(message);
 						$("div.error").show();
 					} else {
 						$("div.error").hide();
@@ -365,159 +412,207 @@ $(function(){
 		},
 		show: function(){
 			return new Promise((resolve, reject) => {
-			var formTL = anime.timeline({
-				easing: 'easeOutQuart',
-				complete: function(anim) {
-				  formPage.init_iframe();
-			      resolve();
-			    }
-			});
+				var formTL = anime.timeline({
+					easing: 'easeOutQuart',
+					complete: function(anim) {
+						formPage.init_iframe();
+						resolve();
+					}
+				});
 
-			formTL
-			  .add({
-			    targets: '#form',
-			    opacity: [0, 1],
-			    duration: 200
-			  })
-			  .add({
-			    targets: '#form .sp-title .word',
-			    translateY: [30, 0],
-			    rotate: ['.02turn', '-0turn'],
-			    opacity:[0,1],
-			    duration: 700,
-			    delay: function(el, i, l) {
-			      return (i * 25);
-			    },
-			    offset: 0,
-			  })
-			  .add({
-			    targets: '#form .left-col .out',
-			    translateY: [60, 0],
-			    opacity:[0,1],
-			    duration: 700,
-			    delay: function(el, i, l) {
-			      return 300+(i * 25);
-			    },
-			    offset: '-=850' // Starts 600ms before the previous animation ends
-			  });
-
+				formTL
+					.add({
+						targets: '#form',
+						opacity: [0, 1],
+						duration: 200
+					})
+					.add({
+						targets: '#form .sp-title .word',
+						translateY: [30, 0],
+						rotate: ['.02turn', '-0turn'],
+						opacity:[0,1],
+						duration: 700,
+						delay: function(el, i, l) {
+							return (i * 25);
+						},
+						offset: 0,
+					})
+					.add({
+						targets: '#form .left-col .out',
+						translateY: [60, 0],
+						opacity:[0,1],
+						duration: 700,
+						delay: function(el, i, l) {
+							return 300+(i * 25);
+						},
+						offset: '-=850' // Starts 600ms before the previous animation ends
+					});
 			});
 		},
 		hide: function(){
 			return new Promise((resolve, reject) => {
 				anime({
-				  targets: '#form',
-				  opacity: [1, 0],
-				  easing: 'easeInOutExpo',
-				  duration: 400,
-				  complete: function(){
-				  	resolve();
-				  }
+					targets: '#form',
+					opacity: [1, 0],
+					easing: 'easeInOutExpo',
+					duration: 400,
+					complete: function(){
+						resolve();
+					}
 				});
 			});
 		}
 	},
 	resultPage = {
 		init: function(){
+			var _ = this;
+
 			$('body').removeClass('intro');
-			var checked_options = Cookies.getJSON('checked_options');
-			if(typeof(checked_options) != "undefined") {
-				for(var i=0; i<checked_options.length; i++){
-					resultData[checked_options[i]][2] = true;
-					resultData[checked_options[i]][3] = true;
-				};
+
+			_.fetchChartData()
+				.then(() => {_.renderChart()})
+				.then(() => {this.show()})
+		},
+		fetchChartData: () => {
+			var _ = this;
+
+			if (_.chartDateFetched) {
+				return new Promise((resolve) => {
+					resolve()
+				})
+			}
+
+			return fetch(apiUrl+"?sheetName=votes_summary")
+				.then(response => response.json())
+				.then(response => {
+					if (response.status==="OK") {
+						_.chartDateFetched = true;
+
+						let rows = response.values,
+							header = rows.pop() // should be ["key", "summary"]
+
+						let chartData = []
+						rows.forEach(row => {
+							let foundIdx = resultData.findIndex(chartRow => chartRow[0]===row[0])
+							if (foundIdx>-1) {
+								resultData[foundIdx][1] = row[1]
+							}
+						})
+					} else {
+						console.error("Cannot fetch the pulling results")
+					}
+				})
+		},
+		renderChart: () => {
+			// read choosed options
+			let chosens = JSON.parse(localStorage.getItem('choosed_options') || "[]");
+			if (chosens && chosens.length) {
+				chosens.forEach(title => {
+					let foundIdx = resultData.findIndex(chartRow => chartRow[0]===title)
+					if (foundIdx>-1) {
+						resultData[foundIdx][2] = true
+						resultData[foundIdx][3] = true
+						console.log("highlight", title)
+					}
+				})
 			} else {
+				// randomly hightlight 3 of them
 				resultData[0][2] = true;
 				resultData[0][3] = true;
-			}
-			Highcharts.chart('chart', {
-			    chart: {
-			        plotBackgroundColor: null,
-			        plotBorderWidth: null,
-			        plotShadow: false,
-			        type: 'pie',
-			        spacing: [0, 0,0,0]
-			    },
-			    title: {
-			        text: ''
-			    },
-			    tooltip: {
-			        borderWidth: 0,
-			        borderRadius: 0,
-			        pointFormat: '',
-			        followPointer: true
-			    },
-			    plotOptions: {
-			        series: {
 
-			        },
-			        pie: {
-			            allowPointSelect: true,
-			            cursor: 'pointer',
-			            dataLabels: {
-			                enabled: true,
-			                softConnector: false,
-			                format: '{point.percentage:.1f}%',
-			                distance: -40,
-			                filter: {
-			                  property: 'percentage',
-			                  operator: '>',
-			                  value: 4
-			                },
-			                style: {
-			                  fontSize: '15px',
-			                  color: '#fff'
-			                }
-			            }
-			        }
-			    },
-			    series: [{
-			        name: 'Reasons for Hope on climate change',
-			        colorByPoint: true,
-			        keys: [
-			            'name', 'y', 'sliced', 'selected', 'color.pattern.image', 'color.pattern.aspectRatio'
-			        ],
-			        states: {
-		                hover: {
-		            		halo: false
-		                }
-		            },
-			        data: resultData,
-			    }]
+				resultData[2][2] = true;
+				resultData[2][3] = true;
+
+				resultData[4][2] = true;
+				resultData[4][3] = true;
+			}
+
+			console.log('Use resultData', resultData)
+
+			Highcharts.chart('chart', {
+				chart: {
+					plotBackgroundColor: null,
+					plotBorderWidth: null,
+					plotShadow: false,
+					type: 'pie',
+					spacing: [0, 0,0,0]
+				},
+				title: {
+					text: ''
+				},
+				tooltip: {
+					borderWidth: 0,
+					borderRadius: 0,
+					pointFormat: '',
+					followPointer: true
+				},
+				plotOptions: {
+					series: {},
+					pie: {
+						allowPointSelect: true,
+						cursor: 'pointer',
+						dataLabels: {
+							enabled: true,
+							softConnector: false,
+							format: '{point.percentage:.1f}%',
+							distance: -40,
+							filter: {
+								property: 'percentage',
+								operator: '>',
+								value: 4
+							},
+							style: {
+								fontSize: '15px',
+								color: '#fff'
+							}
+						}
+					}
+				},
+				series: [{
+					name: 'Reasons for Hope on climate change',
+					colorByPoint: true,
+					keys: [
+					'name', 'y', 'sliced', 'selected', 'color.pattern.image', 'color.pattern.aspectRatio'
+					],
+					states: {
+						hover: {
+							halo: false
+						}
+					},
+					data: resultData,
+				}]
 			});
-		    this.show();
 		},
 		show: function(){
 			return new Promise((resolve, reject) => {
 			var formTL = anime.timeline({
 				easing: 'easeOutQuart',
 				complete: function(anim) {
-			      resolve();
-			    }
+						resolve();
+					}
 			});
 
 			formTL
-			  .add({
-			    targets: '#result .sp-title .word',
-			    translateY: [30, 0],
-			    rotate: ['.02turn', '-0turn'],
-			    opacity:1,
-			    duration: 700,
-			    delay: function(el, i, l) {
-			      return (i * 25);
-			    },
-			  })
-			  .add({
-			    targets: '#result .left-col .out',
-			    translateY: [60, 0],
-			    opacity:[0,1],
-			    duration: 700,
-			    delay: function(el, i, l) {
-			      return 300+(i * 25);
-			    },
-			    offset: '-=850' // Starts 600ms before the previous animation ends
-			  });
-
+				.add({
+					targets: '#result .sp-title .word',
+					translateY: [30, 0],
+					rotate: ['.02turn', '-0turn'],
+					opacity:1,
+					duration: 700,
+					delay: function(el, i, l) {
+						return (i * 25);
+					},
+				})
+				.add({
+					targets: '#result .left-col .out',
+					translateY: [60, 0],
+					opacity:[0,1],
+					duration: 700,
+					delay: function(el, i, l) {
+						return 300+(i * 25);
+					},
+					offset: '-=850' // Starts 600ms before the previous animation ends
+				});
 			});
 		}
 	},
@@ -532,7 +627,7 @@ $(function(){
 			});
 			$('#skip').click(function(e){
 				e.preventDefault();
-				_.introTL.seek(_.introTL.duration);
+				// _.introTL.seek(_.introTL.duration);
 				pageHandler.goTo('#voting', '#intro');
 			});
 			_.show();
@@ -542,158 +637,45 @@ $(function(){
 		},
 		show: function(){
 			var _ = this;
-			return new Promise((resolve, reject) => {
-			_.introTL = anime.timeline({
-				easing: 'easeOutQuart',
-				complete: function(anim) {
-				  _.active = false;
-			      resolve();
-			    }
-			});
-			$('#pause').click(function(){_.introTL.pause(); });
-			$('#play').click(function(){_.introTL.play();});
-			var m = 400;
-			_.introTL
-			  .add({
-			    targets: '#globe',
-			    scale: [.85, 1],
-			    opacity:{
-			    	value: [0,1],
-			    	duration: 2300
-			    },
-			    duration: 7500+m,
-			  }).add({
-			    targets: '#globe .after',
-			    opacity: 1,
-			    duration: 9000+m,
-			    offset: 2400
-			  }).add({
-			    targets: '#intro .f1 .out',
-			    // translateY: [30, 0],
-			    opacity:[0,1],
-			    duration: 800,
-			    delay: function(el, i, l) {
-			      return 300+(i * 1005);
-			    },
-			    offset: 100 // Starts 600ms before the previous animation ends
-			  }).add({
-			    targets: '#intro .f1 .out',
-			    opacity:0,
-			    duration: 400,
-			    delay: function(el, i, l) {
-			      return 300+(i * 505);
-			    },
-			    offset: 2300+m // Starts 600ms before the previous animation ends
-			  }).add({
-			    targets: '#bg1 > .out',
-			    opacity:[0,.8],
-			    duration: 5800,
-			    delay: function(el, i, l) {
-			      return 300+(i * 300);
-			    },
-			    offset: 2600+m
-			  })
-			  .add({
-			    targets: '#intro .f2 .out',
-			    // translateY: [30, 0],
-			    opacity:[0,1],
-			    duration: 800,
-			    delay: function(el, i, l) {
-			      return 300+(i * 1005);
-			    },
-			    offset: 2960+m // Starts 600ms before the previous animation ends
-			  }).add({
-			    targets: '#bg1',
-			    // translateY: [30, 0],
-			    opacity:[1,0],
-			    duration: 4000,
-			    offset: 5860+m+m // Starts 600ms before the previous animation ends
-			  }).add({
-			    targets: '#intro .f2 .out',
-			    // translateY: [30, 0],
-			    opacity:[1,0],
-			    duration: 400,
-			    delay: function(el, i, l) {
-			      return 300+(i * 505);
-			    },
-			    offset: 6560+m+m // Starts 600ms before the previous animation ends
-			  }).add({
-			    targets: '#green-bg',
-			    // translateY: [30, 0],
-			    opacity: 1,
-			    duration: 4000,
-			    offset: 5860+m+m // Starts 600ms before the previous animation ends
-			  }).add({
-			    targets: '#intro .f3 .out',
-			    // translateY: [30, 0],
-			    opacity:1,
-			    duration: 800,
-			    delay: function(el, i, l) {
-			      return 300+(i * 1505);
-			    },
-			    complete: function(){
-			    	$('#bg2').css('display', 'block');
-			    	setTimeout(function(){
-			    		$('#bg2').addClass('show');
-			    		$('#green-bg').addClass('hide');
-			    	}, 1300);
-			    },
-			    offset: 6920+m+m // Starts 600ms before the previous animation ends
-			  }).add({
-			    targets: '#intro .f3 .out',
-			    // translateY: [30, 0],
-			    opacity:0,
-			    duration: 800,
-			    offset: 10620+m+m // Starts 600ms before the previous animation ends
-			  })
-			  .add({
-			    targets: '#intro .f4 .out',
-			    // translateY: [30, 0],
-			    opacity:1,
-			    duration: 800,
-			    delay: function(el, i, l) {
-			      return 300+(i * 1505);
-			    },
-			    offset: 10880+m+m+m // Starts 600ms before the previous animation ends
-			  }).add({
-			    targets: '#green-bg2',
-			    // translateY: [30, 0],
-			    opacity: 1,
-			    complete: function(){
-			    	pageHandler.goTo('#voting', '#intro');
-			    },
-			    duration: 4000+m,
-			    offset: 14880+m+m // Starts 600ms before the previous animation ends
-			  })
 
-
-			});
+			return new Promise((resolve) => {
+				pageHandler.goTo('#voting', '#intro');
+				_.active = false;
+				resolve()
+			})
 		}
 	};
-	if($('#voting').length == 1){
-		votingPage.init();
-		formPage.init();
-	}
-	$(window).load(function(){
+
+	// fetch user's ip
+	let ip = "";
+	fetch("https://api.ipify.org?format=json")
+		.then((response) => response.json())
+		.then((response) => {
+			if (response.ip) {
+				ip = response.ip
+			}
+		})
+
+	// resolve which the current page is
+	const EN_PAGE_STATUS = resolveEnPagePetitionStatus()
+	console.log("EN_PAGE_STATUS", EN_PAGE_STATUS)
+	if (EN_PAGE_STATUS==="FRESH") {
+		if($('#voting').length == 1){
+			votingPage.init();
+			formPage.init();
+		}
+
 		scrollTo(0,0);
 		setTimeout(function(){
 			scrollTo(0,0);
 			if($('#intro').length == 1) introPage.init();
-			if($('#result').length == 1) {
-				$.getJSON("https://dev.do2.documentonready.com/greenpeace-ipcc/result.php?callback=?", function(data) {
-					// console.log(data);
-					for(var i = 0 ; i<data.length ; i++) {
-						resultData[i][1] = data[i];
-					}
-					resultPage.init();
-				});
-			}
-			// $('body').removeClass('intro');
-			// $('#voting').addClass('in');
-			// pageHandler.goTo('#voting', '#intro');
-
 		}, 400);
-	}).resize(function(){
-		if(introPage.active) introPage.resize();
-	});
+
+		$(window).resize(function(){
+			if(introPage.active) introPage.resize();
+		});
+	} else if (EN_PAGE_STATUS==="SUCC") {
+		pageHandler.goTo('#result', '#intro');
+		resultPage.init();
+	}
 });

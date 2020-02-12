@@ -528,7 +528,7 @@ body{
     display:none !important
 }
 label.error{
-    color:#f00;
+    color:#F21D2F;
     text-align:left;
     max-width:500px;
     margin:0 auto 15px;
@@ -701,7 +701,7 @@ hr{
 .readmore,.text-link{
     display:inline-block;
     letter-spacing:.15em;
-    font-size:.875em
+    /*font-size:.875em*/
 }
 .readmore:after,.text-link:after{
     display:block;
@@ -1438,8 +1438,8 @@ body.typing #typing-panel{
     }
     .left-col .content{
         position:relative;
-        top:50%;
-        transform:translateY(-50%)
+        top:30%;
+        transform:translateY(-30%)
     }
     .right-col{
         float:left;
@@ -1514,7 +1514,7 @@ body.typing #typing-panel{
         margin-bottom:1em
     }
     #voting.detail #details{
-        height:60vh
+        height:80vh
     }
     #typing-panel .sp-title{
         font-size:4.8vw
@@ -1531,7 +1531,7 @@ body.typing #typing-panel{
         max-height:500px
     }
     #details{
-        top:20%;
+        top:10%;
         left:50%;
         width:80vw;
         transform:translateX(-50%)
