@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "jquery": "1.11"
+    "gpea-npm-en-uploader": "greenpeace/gpea-npm-en-uploader"
   },
   "devDependencies": {
     "node-sass": "^4.13.1",
@@ -17,7 +17,8 @@
     "build": "react-scripts build",
     "build:en": "PUBLIC_URL=https://change.greenpeace.org.tw/2020/petition/zhtw.2020.climate.government_improvement.general.signup react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "yarn run build:en && gpea-npm-en-uploader"
   },
   "eslintConfig": {
     "extends": "react-app"

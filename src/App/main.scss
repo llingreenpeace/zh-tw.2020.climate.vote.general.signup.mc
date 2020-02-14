@@ -45,7 +45,6 @@ i {
 
 .highlight{
   color:#afffa0;
-  font-size: 1.4vw;
 }
 
 .voting .left-col .out {
@@ -55,23 +54,29 @@ i {
 #form {
   overflow-y: auto;
 }
-#form .you-can {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-left: 1rem;
-  line-height: normal;
+.you-can-panel {
+  margin-top: 3rem;
 
-  .number {
-    color: #BEDCB1;
-    font-size: 4rem;
-    margin-right: 0.5rem;
-  }
+  .you-can {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 1rem;
+    line-height: normal;
+    margin-bottom: 1rem;
 
-  .text-part {
-    font-size: 1.3rem;
+    img {
+      display: block;
+      width: 5rem;
+      margin-right: 0.5rem;
+    }
+
+    .text-part {
+      font-size: 1.3rem;
+    }
   }
 }
+
 
 // loading
 .lds-dual-ring {

@@ -16,13 +16,12 @@ var nro_data_ok_id = '';
 var base_url = 'https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1735/';  //cdn url
 var resultData = [
 	// 'name', 'y', 'sliced', 'selected', 'color.pattern.image', 'color.pattern.aspectRatio'
-	["政府訂定更積極的減碳目標"	,25, false, false, base_url+'1.jpg', 1],
-	["政府應該加速淘汰燃煤電廠"	,25, false, false, base_url+'2.jpg', 1],
-	["提出中長期再生能源發展目標"	,25, false, false, base_url+'3.jpg', 1],
-	["政府要求用電大戶負起綠能責任"	,15, false, false, base_url+'4.jpg', 1],
-	["高耗能企業擔起減碳責任"	,15, false, false, base_url+'5.jpg', 1],
-	["企業提供氣候變遷風險評估"	,25, false, false, base_url+'6.jpg', 1],
-	["從高污染產業逐步撤資"	,25, false, false, base_url+'7.jpg', 1],
+	["減碳目標再翻新"	,25, false, false, base_url+'1.jpg', 1],
+	["加速淘汰燃煤電廠"	,25, false, false, base_url+'2.jpg', 1],
+	["規劃再生能源下一步"	,25, false, false, base_url+'3.jpg', 1],
+	["用電大戶承擔更多綠能責任"	,15, false, false, base_url+'4.jpg', 1],
+	["停止投資高污染、高耗能產業"	,15, false, false, base_url+'5.jpg', 1],
+	["不再使用塑膠與其他石化產品"	,25, false, false, base_url+'6.jpg', 1],
 ]
 
 Object.assign($.validator.messages, {

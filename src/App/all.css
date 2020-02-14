@@ -1210,10 +1210,11 @@ hr{
     float:left
 }
 #sticky_widget .logo{
-    padding:1.7em 1.57em 0;
-    font-size:.6em;
-    letter-spacing:.4em;
-    line-height:2em
+    padding:1rem 1rem 0 1rem;
+}
+#sticky_widget .logo a{
+    display: block;
+    box-sizing: border-box;
 }
 #sticky_widget .txt{
     letter-spacing:.17em;
@@ -1234,6 +1235,14 @@ hr{
 #sticky_widget svg{
     fill:currentColor
 }
+#sticky_widget .share-btn .fab,
+#sticky_widget .share-btn .fas{
+    font-size:2em
+}
+#sticky_widget .share-btn .fas.fa-share-alt {
+    font-size: 1.3rem;
+}
+
 #sticky_widget .icon{
     display:block;
     margin:0 auto;
