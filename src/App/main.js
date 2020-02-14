@@ -1,6 +1,11 @@
 import './all.css'
 import './main.scss'
 
+
+/**
+ * This script use the google sheet as the DB
+ */
+
 const {$, anime, autosize, Cookies, Highcharts} = window
 const apiUrl = "https://cors-anywhere.arpuli.com/https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec"
 // const apiUrl = "https://script.google.com/macros/s/AKfycbzRtGHGwTYjnzTUbYsSJSbWtYh7D47qGaSbLg-CeLq4v6xwWLI/exec" // test project
@@ -8,17 +13,15 @@ const apiUrl = "https://cors-anywhere.arpuli.com/https://script.google.com/macro
 var options_id = 'en__field_supporter_questions_288643'; // 選擇關心議題的 id
 
 var free_text_id = 'en__field_supporter_questions_288644';
-
-
 var email_optin_id = 'en__field_supporter_questions_7275';
 var nro_data_ok_id = '';
 
-var base_url = 'https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1735/';  //cdn url
+var base_url = 'https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote/options/';  //cdn url
 var resultData = [
 	// 'name', 'y', 'sliced', 'selected', 'color.pattern.image', 'color.pattern.aspectRatio'
-	["減碳目標再翻新"	,25, false, false, base_url+'1.jpg', 1],
-	["加速淘汰燃煤電廠"	,25, false, false, base_url+'2.jpg', 1],
-	["規劃再生能源下一步"	,25, false, false, base_url+'3.jpg', 1],
+	["減碳目標再翻新"	        ,25, false, false, base_url+'1.jpg', 1],
+	["加速淘汰燃煤電廠"	        ,25, false, false, base_url+'2.jpg', 1],
+	["規劃再生能源下一步"	      ,25, false, false, base_url+'3.jpg', 1],
 	["用電大戶承擔更多綠能責任"	,15, false, false, base_url+'4.jpg', 1],
 	["停止投資高污染、高耗能產業"	,15, false, false, base_url+'5.jpg', 1],
 	["不再使用塑膠與其他石化產品"	,25, false, false, base_url+'6.jpg', 1],
@@ -44,6 +47,30 @@ const resolveEnPagePetitionStatus = () => {
 
 	return status;
 };
+
+window.share = () => {
+	// WEB SHARE API
+	if (navigator.share) {
+	  // we can use web share!
+	  navigator
+	    .share({
+	      title: "2020 我希望臺灣優先採取的氣候行動是...",
+	      text: "節能減碳不是一個人的事！臺灣能如何扭轉氣候危機？立即分享你的想法，群策群力、守護地球！",
+	      url: "https://act.gp/39zIB9G"
+	    })
+	    .then(() => console.log("Successfully shared"))
+	    .catch(error => console.log("Error sharing:", error));
+	} else {
+	  // provide a fallback here
+	  var baseURL = "https://www.facebook.com/sharer/sharer.php";
+	  var u = "https://act.gp/39zIB9G";
+	  console.log('open', baseURL + "?u=" + encodeURIComponent(u))
+	  window.open(
+	    baseURL + "?u=" + encodeURIComponent(u),
+	    "_blank"
+	  );
+	}
+}
 
 $(function(){
 	var scrollTo= function(t, s){
@@ -488,7 +515,7 @@ $(function(){
 						_.chartDateFetched = true;
 
 						let rows = response.values,
-							header = rows.pop() // should be ["key", "summary"]
+							header = rows.shift() // should be ["key", "summary"]
 
 						let chartData = []
 						rows.forEach(row => {
@@ -526,7 +553,7 @@ $(function(){
 				resultData[4][3] = true;
 			}
 
-			console.log('Use resultData', resultData)
+			console.log('resultData', resultData)
 
 			Highcharts.chart('chart', {
 				chart: {
@@ -546,19 +573,20 @@ $(function(){
 					followPointer: true
 				},
 				plotOptions: {
-					series: {},
 					pie: {
 						allowPointSelect: true,
 						cursor: 'pointer',
 						dataLabels: {
 							enabled: true,
-							softConnector: false,
-							format: '{point.percentage:.1f}%',
-							distance: -40,
+							softConnector: true,
+							connectorWidth: 1,
+							connectorColor: "#FFFFFF",
+							format: '<b>{point.name}</b> {point.percentage:.1f}%',
+							// distance: -40,
 							filter: {
 								property: 'percentage',
 								operator: '>',
-								value: 4
+								value: 5
 							},
 							style: {
 								fontSize: '15px',

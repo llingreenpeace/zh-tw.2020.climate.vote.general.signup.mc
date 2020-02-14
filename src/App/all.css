@@ -1153,16 +1153,34 @@ hr{
     margin-bottom:.8em
 }
 #result .btns{
-    margin-top:2em
+    margin-top:2em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
-#result .btns svg{
-    width:32px
+#result .btns .icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/*#result .btns a span {
+    display: block;
+}*/
+
+#result .btns .fas,
+#result .btns .fab {
+    font-size: 2rem;
+}
+#result .btns .fas.fa-share-alt{
+    font-size:1.5em
 }
 #result .share-btn.on .icon-wrapper{
     background:#fff
 }
-#result .share-btn.on svg{
-    fill:#7eb575
+#result .share-btn.on .fas,
+#result .share-btn.on .fab {
+    color: #7eb575;
 }
 #result .icon-wrapper{
     width:68px;
@@ -1170,7 +1188,6 @@ hr{
     border-radius:50%;
     border:1px solid #fff;
     display:inline-block;
-    padding-top:18px;
     margin:0 9px
 }
 #result .sharebox{
@@ -1200,7 +1217,7 @@ hr{
     overflow:hidden
 }
 #sticky_widget{
-    font-family:Avenir,'Avenir',Arial;
+    font-family: Avenir,'Avenir',Arial;
     position:relative;
     font-size:.875em;
     border:1px solid rgba(255,255,255,0.5);
@@ -1290,8 +1307,9 @@ body.intro #campaing-title{
 .no-touchevents #result .share-btn:hover .icon-wrapper{
     background:#fff
 }
-.no-touchevents #result .share-btn:hover svg{
-    fill:#7eb575
+.no-touchevents #result .share-btn:hover .fab,
+.no-touchevents #result .share-btn:hover .fas {
+    color:#7eb575
 }
 #typing-panel,#details{
     position:fixed;

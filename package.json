@@ -1,6 +1,6 @@
 {
   "name": "zh-tw.2020.climate.ipcc.general.signup.na",
-  "homepage": "https://change.greenpeace.org.tw/2020/petition/zhtw.2020.climate.government_improvement.general.signup/",
+  "homepage": "https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -15,7 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:en": "PUBLIC_URL=https://change.greenpeace.org.tw/2020/petition/zhtw.2020.climate.government_improvement.general.signup react-scripts build",
+    "build:en": "PUBLIC_URL=https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "yarn run build:en && gpea-npm-en-uploader"
