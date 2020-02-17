@@ -604,7 +604,7 @@ form.en__component{
     width:.17em
 }
 .sp-title{
-    line-height:.93em;
+    line-height:120%;
     text-align:center;
     margin-bottom:17px
 }
@@ -1054,7 +1054,7 @@ hr{
 }
 #form .right-col h3,#result .right-col h3{
     font-size:1.875em;
-    line-height:1.1em;
+
     margin-bottom:.567em
 }
 #form .right-col{
@@ -1084,6 +1084,19 @@ hr{
     line-height:1.13em;
     padding-bottom:.17em
 }
+#form .sp-title .loading-image {
+    width: 2vw;
+    animation-name: spin;
+    animation-duration: 5000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes spin {
+    from {transform:rotate(0deg); }
+    to {transform:rotate(360deg); }
+}
+
 #form .text-link{
     padding:10px;
     font-size:1.2em
@@ -1093,14 +1106,16 @@ hr{
 }
 #map,#chart-wrapper{
     position:relative;
-    overflow:hidden
 }
-#map:before,#chart-wrapper:before{
+#chart-wrapper{
+    height: 400px;
+}
+/*#map:before,#chart-wrapper:before{
     position:relative;
     display:block;
     content:'';
     padding-top:100%
-}
+}*/
 #map .iframe-wrapper,#chart{
     position:absolute;
     top:0;
@@ -1437,8 +1452,8 @@ body.typing #typing-panel{
     }
     .left-col .content{
         position:relative;
-        top:30%;
-        transform:translateY(-30%)
+        top:10%;
+        transform:translateY(-10%)
     }
     .right-col{
         float:left;
@@ -1595,9 +1610,6 @@ body.typing #typing-panel{
         width:40%;
         padding:80px 50px 50px 30px
     }
-    #chart-wrapper{
-        max-height:60vh
-    }
 }
 @media (min-width:1000px) and (max-width:1200px){
     #gp-logo{
@@ -1738,7 +1750,7 @@ body.typing #typing-panel{
         width:50%
     }
     .sp-title{
-        font-size:50px
+        font-size: 50px
     }
     .left-col{
         padding:0 15px
@@ -1864,6 +1876,9 @@ body.typing #typing-panel{
         margin-bottom:2em;
         max-width:460px
     }
+    #form .sp-title .loading-image {
+        width:40px;
+    }
 }
 @media (max-width:500px){
     .highcharts-data-label text,text.highcharts-data-label{
@@ -1888,7 +1903,16 @@ body.typing #typing-panel{
         font-size:7.5vw
     }
     #result .sp-title{
-        font-size:11vw
+        font-size:1.5em;
+        line-height: 130%;
+    }
+    #form .right-col h3,
+    #result .right-col h3 {
+        font-size:1.5em;
+        line-height: 130%;
+    }
+    #form .sp-title .loading-image {
+        width:7.5vw;
     }
 }
 @media (max-width:350px){

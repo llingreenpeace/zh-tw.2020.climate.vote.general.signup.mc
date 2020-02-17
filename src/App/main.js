@@ -18,13 +18,13 @@ var nro_data_ok_id = '';
 
 var base_url = 'https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote/options/';  //cdn url
 var resultData = [
-	// 'name', 'y', 'sliced', 'selected', 'color.pattern.image', 'color.pattern.aspectRatio'
-	["減碳目標再翻新"	        ,25, false, false, base_url+'1.jpg', 1],
-	["加速淘汰燃煤電廠"	        ,25, false, false, base_url+'2.jpg', 1],
-	["規劃再生能源下一步"	      ,25, false, false, base_url+'3.jpg', 1],
-	["用電大戶承擔更多綠能責任"	,15, false, false, base_url+'4.jpg', 1],
-	["停止投資高污染、高耗能產業"	,15, false, false, base_url+'5.jpg', 1],
-	["不再使用塑膠與其他石化產品"	,25, false, false, base_url+'6.jpg', 1],
+	// 'name', 'y', 'color'
+	["減碳目標再翻新"	        ,25, '#FEA47F'],
+	["加速淘汰燃煤電廠"	        ,25, '#25CCF7'],
+	["規劃再生能源下一步"	      ,25, '#EAB543'],
+	["用電大戶承擔更多綠能責任"	,15, '#55E6C1'],
+	["停止投資高污染、高耗能產業"	,15, '#CAD3C8'],
+	["不再使用塑膠與其他石化產品"	,25, '#58B19F'],
 ]
 
 Object.assign($.validator.messages, {
@@ -185,9 +185,6 @@ $(function(){
 							}
 						]
 					})
-				})
-				.then(() => {
-					resultPage.fetchChartData()
 				})
 
 				// save the selection to localStorage
@@ -532,81 +529,51 @@ $(function(){
 		renderChart: () => {
 			// read choosed options
 			let chosens = JSON.parse(localStorage.getItem('choosed_options') || "[]");
-			if (chosens && chosens.length) {
-				chosens.forEach(title => {
-					let foundIdx = resultData.findIndex(chartRow => chartRow[0]===title)
-					if (foundIdx>-1) {
-						resultData[foundIdx][2] = true
-						resultData[foundIdx][3] = true
-						console.log("highlight", title)
-					}
-				})
-			} else {
-				// randomly hightlight 3 of them
-				resultData[0][2] = true;
-				resultData[0][3] = true;
-
-				resultData[2][2] = true;
-				resultData[2][3] = true;
-
-				resultData[4][2] = true;
-				resultData[4][3] = true;
-			}
-
-			console.log('resultData', resultData)
+			console.log('Use Chart Data', resultData)
 
 			Highcharts.chart('chart', {
 				chart: {
-					plotBackgroundColor: null,
-					plotBorderWidth: null,
 					plotShadow: false,
-					type: 'pie',
-					spacing: [0, 0,0,0]
+					type: 'bar',
+					height: '400px',
 				},
-				title: {
-					text: ''
+				title: {text: ''},
+				xAxis: {
+					visible: true,
+			    labels: {
+			    	enabled: false
+			    }
 				},
-				tooltip: {
-					borderWidth: 0,
-					borderRadius: 0,
-					pointFormat: '',
-					followPointer: true
+				yAxis: {
+					visible: false,
+			    labels: {
+			    	enabled: false
+			    }
 				},
-				plotOptions: {
-					pie: {
-						allowPointSelect: true,
-						cursor: 'pointer',
-						dataLabels: {
-							enabled: true,
-							softConnector: true,
-							connectorWidth: 1,
-							connectorColor: "#FFFFFF",
-							format: '<b>{point.name}</b> {point.percentage:.1f}%',
-							// distance: -40,
-							filter: {
-								property: 'percentage',
-								operator: '>',
-								value: 5
-							},
-							style: {
-								fontSize: '15px',
-								color: '#fff'
-							}
-						}
-					}
+				tooltip: { enabled: false },
+				plotOptions: {},
+				legend: {
+					enabled: false
 				},
 				series: [{
-					name: 'Reasons for Hope on climate change',
 					colorByPoint: true,
-					keys: [
-					'name', 'y', 'sliced', 'selected', 'color.pattern.image', 'color.pattern.aspectRatio'
-					],
-					states: {
-						hover: {
-							halo: false
-						}
+					keys: ['name', 'y', 'color'],
+					dataLabels: {
+				    enabled: true,
+				    color: '#FFFFFF',
+				    style: {fontSize: '1rem'},
+				    useHTML: true,
+				    formatter:function() {
+				      var pcnt = (this.y / this.series.data.map(p => p.y).reduce((a, b) => a + b, 0)) * 100;
+				      let checked = chosens.indexOf(this.point.name)>-1
+				      console.log('chosens', chosens)
+				      return `${checked ? '<i class="fas fa-check-circle"></i> ' : ''}${this.point.name} ${pcnt.toFixed(1)+"%"}` ;
+				    },
+				    inside: true,
+				    align: 'left'
 					},
 					data: resultData,
+					pointWidth: 50
 				}]
 			});
 		},

@@ -56,6 +56,7 @@ i {
 }
 .you-can-panel {
   margin-top: 3rem;
+  padding: 0.5rem 1rem;
 
   .you-can {
     display: flex;
@@ -119,5 +120,8 @@ i {
   }
   #sticky_widget {
     display: none;
+  }
+  .you-can-panel {
+    text-align: left;
   }
 }

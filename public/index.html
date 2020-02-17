@@ -55,11 +55,8 @@
 			<div id="voting" class="">
 				<div class="left-col">
 					<div class="content">
-						<h2 class="sp-title">
-							<span class="word">2020</span>
-							<br />
-							<span class="b highlight word">#氣候要贏</span>
-						</h2>
+						<!-- <h2 class="sp-title"> <span class="word">2020</span> <br /> <span class="b highlight word">#氣候要贏</span> </h2> -->
+						<img src="%PUBLIC_URL%/2020-vote-for-climate.png?v=123" alt="2020 氣候要贏" class="out">
 						<hr class="out" />
 						<p class="out">
 							節能減碳不是一個人的責任<br />
@@ -68,9 +65,9 @@
 							你希望臺灣優先做出哪些改變？<br />
 							<br />
 
-							動動手指，<a href="#" class="text-link typing-btn">分享你的想法</a>。
+							動動手指，勾選與您想法相符的選項或與我們<a href="#" class="text-link typing-btn">分享其他有趣的想法</a>。
 						</p>
-						<a href="#" class="btn btn2 next-btn hidden-m">成為地球守護者<span class='indicator'>(<span class="count">0</span>/3)</span></a>
+						<a href="#" class="btn btn2 next-btn hidden-m">確 定 投 票<span class='indicator'>(<span class="count">0</span>/3)</span></a>
 					</div>
 				</div>
 				<div class="right-col options">
@@ -222,14 +219,14 @@
 					<div class="content">
 						<div class="m-content">
 							<h2 class="sp-title">
-								<span class="word b">應對氣候變化，</span><span class="word b">我覺得</span> <span class="b word">
-									#為時未晚</span>
-								<i class="word">因為</i> <i class="word">...</i>
+								<span class="word b">
+									扭轉氣候危機，我覺得臺灣應該要⋯
+								</span>
 							</h2>
 							<p>不多於200字</p>
 							<textarea></textarea>
 						</div>
-						<a href="#" id="type-next-btn" class="btn btn2">OK</a>
+						<a href="#" id="type-next-btn" class="btn btn2">送出</a>
 					</div>
 				</div>
 			</div>
@@ -237,7 +234,8 @@
 				<div class="left-col">
 					<div class="content">
 						<h2 class="sp-title">
-							<i class="word">正在更新投票結果…</i>
+							<img src="%PUBLIC_URL%/loading.png?v=123" class="loading-image" alt="正在更新投票結果…">
+							<span class="word">正在更新投票結果…</span>
 						</h2>
 						<p class="out">
 							等待時間也不浪費！<br>
@@ -518,7 +516,7 @@
 							</div>
 							<label id="fake_supporter_country-error" class="error" for="fake_supporter_country"></label>
 							<div class="en__submit">
-								<button style="" class="btn btn2">成爲地球守護者</button>
+								<button style="" class="btn btn2">OK</button>
 							</div>
 							<div class="form-field checkbox-field">
 								<div class="checkbox">
@@ -707,7 +705,6 @@
 	</div>
 	<script src="%PUBLIC_URL%/plugins.1.js?v=1537759485000"></script>
 	<script src="%PUBLIC_URL%/plugins.2.js?v=1537759491000"></script>
-	<!-- <script src="https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1735/all.js?v=1538652477000"></script> -->
 </body>
 
 </html>
