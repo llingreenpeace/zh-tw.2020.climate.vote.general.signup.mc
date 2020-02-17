@@ -566,7 +566,6 @@ $(function(){
 				    formatter:function() {
 				      var pcnt = (this.y / this.series.data.map(p => p.y).reduce((a, b) => a + b, 0)) * 100;
 				      let checked = chosens.indexOf(this.point.name)>-1
-				      console.log('chosens', chosens)
 				      return `${checked ? '<i class="fas fa-check-circle"></i> ' : ''}${this.point.name} ${pcnt.toFixed(1)+"%"}` ;
 				    },
 				    inside: true,
