@@ -56,14 +56,14 @@ window.share = () => {
 	    .share({
 	      title: "2020 我希望臺灣優先採取的氣候行動是...",
 	      text: "節能減碳不是一個人的事！臺灣能如何扭轉氣候危機？立即分享你的想法，群策群力、守護地球！",
-	      url: "https://act.gp/38G8NiR"
+	      url: "https://act.gp/32dQkaT"
 	    })
 	    .then(() => console.log("Successfully shared"))
 	    .catch(error => console.log("Error sharing:", error));
 	} else {
 	  // provide a fallback here
 	  var baseURL = "https://www.facebook.com/sharer/sharer.php";
-	  var u = "https://act.gp/38G8NiR";
+	  var u = "https://act.gp/32dQkaT";
 	  console.log('open', baseURL + "?u=" + encodeURIComponent(u))
 	  window.open(
 	    baseURL + "?u=" + encodeURIComponent(u),
