@@ -412,7 +412,7 @@ $(function(){
 			// create the year options
 			let currYear = new Date().getFullYear()
 			for (var i = 0; i < 80; i++) {
-				let option = `<option value="${currYear-i}/01/01">${currYear-i}</option>`
+				let option = `<option value="01/01/${currYear-i}">${currYear-i}</option>`
 
 				$("#fake_supporter_birthYear").append(option);
 				$('#en__field_supporter_NOT_TAGGED_6').append(option);
