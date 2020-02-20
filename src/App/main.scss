@@ -24,9 +24,6 @@ i {
   margin-top: 20px;
 }
 
-.form-field.select-field {
-  display: none;
-}
 .text-field label, .select-field label {
   font-size: 16px;
 }
@@ -113,6 +110,31 @@ i {
 .checkbox-field {
   a {
     text-decoration: underline;
+  }
+}
+
+.columns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .column {
+    margin-right: 1rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+  }
+}
+
+.name-columns {
+  .last-name {
+    max-width: 40%;
+
+  }
+  .first-name {
+    flex: 1;
   }
 }
 

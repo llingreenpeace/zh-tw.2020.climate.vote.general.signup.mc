@@ -13,7 +13,7 @@ const apiUrl = "https://cors-anywhere.arpuli.com/https://script.google.com/macro
 var options_id = 'en__field_supporter_questions_288643'; // 選擇關心議題的 id
 
 var free_text_id = 'en__field_supporter_questions_288644';
-var email_optin_id = 'en__field_supporter_questions_7275';
+var email_optin_id = 'en__field_supporter_questions_7276';
 var nro_data_ok_id = '';
 
 var base_url = 'https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote/options/';  //cdn url
@@ -381,6 +381,8 @@ $(function(){
 		init: function(){
 			var _ = this;
 			_.$container = $('#form');
+
+
 			_.$container.find('input, select').bind('change blur', function(){
 				if($(this).attr('id') == 'fake_optin') {
 					if(document.getElementById('fake_optin').checked){
@@ -390,20 +392,32 @@ $(function(){
 					}
 				}
 				if($(this).val() !== ''){
-					console.log('filled');
 					$(this).addClass('filled');
 				}
 				else{
 					$(this).removeClass('filled');
 				}
 			});
-			_.$container.find('button').click(function(e){
+
+			_.$container
+			.find('button').click(function(e){
 				e.preventDefault();
 				$("#fake-form").submit();
-			}).end().find('.back-btn').click(function(e){
+			}).end()
+			.find('.back-btn').click(function(e){
 				e.preventDefault();
 				pageHandler.goTo('#voting', '#form');
 			});
+
+			// create the year options
+			let currYear = new Date().getFullYear()
+			for (var i = 0; i < 80; i++) {
+				let option = `<option value="${currYear-i}">${currYear-i}</option>`
+
+				$("#fake_supporter_birthYear").append(option);
+				$('#en__field_supporter_NOT_TAGGED_6').append(option);
+			}
+
 			$.validator.addMethod( //override email with django email validator regex - fringe cases: "user@admin.state.in..us" or "name@website.a"
 						'email',
 						function(value, element){
@@ -411,6 +425,7 @@ $(function(){
 						},
 						'Email 格式錯誤'
 				);
+
 			$("#fake-form").validate({
 				errorPlacement: function(error, element) {
 					element.parents("div.form-field:first").after( error );
@@ -430,7 +445,9 @@ $(function(){
 					$('#en__field_supporter_firstName').val($('#fake_supporter_firstName').val());
 					$('#en__field_supporter_lastName').val($('#fake_supporter_lastName').val());
 					$('#en__field_supporter_emailAddress').val($('#fake_supporter_emailAddress').val());
-					$('#en__field_supporter_country').val($('#fake_supporter_country').val());
+
+					$('#en__field_supporter_phoneNumber').val($('#fake_supporter_phoneNumber').val());
+					$('#en__field_supporter_NOT_TAGGED_6').val($('#fake_supporter_birthYear').val());
 
 					if(document.getElementById('fake_optin').checked) {
 						$('#'+email_optin_id).prop( "checked", true );
