@@ -412,19 +412,32 @@ $(function(){
 			// create the year options
 			let currYear = new Date().getFullYear()
 			for (var i = 0; i < 80; i++) {
-				let option = `<option value="${currYear-i}">${currYear-i}</option>`
+				let option = `<option value="${currYear-i}/01/01">${currYear-i}</option>`
 
 				$("#fake_supporter_birthYear").append(option);
 				$('#en__field_supporter_NOT_TAGGED_6').append(option);
 			}
 
 			$.validator.addMethod( //override email with django email validator regex - fringe cases: "user@admin.state.in..us" or "name@website.a"
-						'email',
-						function(value, element){
-								return this.optional(element) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/i.test(value);
-						},
-						'Email 格式錯誤'
-				);
+				'email',
+				function(value, element){
+						return this.optional(element) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/i.test(value);
+				},
+				'Email 格式錯誤'
+			);
+
+			$.validator.addMethod(
+				"taiwan-phone",
+				function (value, element) {
+					console.log('do vlaidate')
+					return this.optional(element) || /^[\d \-+]{7,15}$/i.test(value);
+				},
+				"電話格式不正確，請只輸入數字 0912345678 或 02-12345678")
+
+			$.validator.addClassRules({ // connect it to a css class
+			    "taiwan-phone" : { "taiwan-phone" : true }
+			});
+
 
 			$("#fake-form").validate({
 				errorPlacement: function(error, element) {
