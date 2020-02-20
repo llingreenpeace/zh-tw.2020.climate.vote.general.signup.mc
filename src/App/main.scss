@@ -138,6 +138,13 @@ i {
   }
 }
 
+
+.mobile {
+  .readmore {
+    display: none
+  }
+}
+
 @media (min-width: 1000px) {
   #voting .left-col p {
     padding: 0 30px;
@@ -152,5 +159,23 @@ i {
   }
   .you-can-panel {
     text-align: left;
+  }
+
+  .mobile {
+    text-align: center;
+
+    .readmore {
+      color: white;
+      text-shadow:0 0 5px #000;
+      display: inline-block;
+
+      &:after{
+        display:block;
+        width: auto;
+        height:3px;
+        background:#afffa0;
+        content:'';
+      }
+    }
   }
 }
