@@ -6,7 +6,7 @@ import './main.scss'
  * This script use the google sheet as the DB
  */
 
-const {$, anime, autosize, Cookies, Highcharts} = window
+const {$, anime, autosize, Cookies, Highcharts, dataLayer} = window
 const apiUrl = "https://cors-anywhere.arpuli.com/https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec"
 // const apiUrl = "https://script.google.com/macros/s/AKfycbzRtGHGwTYjnzTUbYsSJSbWtYh7D47qGaSbLg-CeLq4v6xwWLI/exec" // test project
 
@@ -48,27 +48,45 @@ const resolveEnPagePetitionStatus = () => {
 	return status;
 };
 
+const gtmTrack = ({category, action, label, value}) => {
+	dataLayer.push({
+		'event': 'gaEvent',
+		'eventCategory': category,
+		'eventAction': action,
+		'eventLabel': label,
+		'eventValue': value
+	});
+
+	dataLayer.push({
+		'event' : 'fbqEvent',
+		'contentCategory': category,
+		'contentType': action,
+		'contentName': label,
+		'value': value
+	});
+}
+
 window.share = () => {
 	// WEB SHARE API
 	if (navigator.share) {
-	  // we can use web share!
-	  navigator
-	    .share({
-	      title: "2020 我希望臺灣優先採取的氣候行動是...",
-	      text: "節能減碳不是一個人的事！臺灣能如何扭轉氣候危機？立即分享你的想法，群策群力、守護地球！",
-	      url: "https://act.gp/32dQkaT"
-	    })
-	    .then(() => console.log("Successfully shared"))
-	    .catch(error => console.log("Error sharing:", error));
+		// we can use web share!
+		navigator
+			.share({
+				title: "2020 我希望臺灣優先採取的氣候行動是...",
+				text: "節能減碳不是一個人的事！臺灣能如何扭轉氣候危機？立即分享你的想法，群策群力、守護地球！",
+				url: "https://act.gp/32dQkaT"
+			})
+			.then(() => console.log("Successfully shared"))
+			.catch(error => console.log("Error sharing:", error));
 	} else {
-	  // provide a fallback here
-	  var baseURL = "https://www.facebook.com/sharer/sharer.php";
-	  var u = "https://act.gp/32dQkaT";
-	  console.log('open', baseURL + "?u=" + encodeURIComponent(u))
-	  window.open(
-	    baseURL + "?u=" + encodeURIComponent(u),
-	    "_blank"
-	  );
+		// provide a fallback here
+		var baseURL = "https://www.facebook.com/sharer/sharer.php";
+		var u = "https://act.gp/32dQkaT";
+		console.log('open', baseURL + "?u=" + encodeURIComponent(u))
+		window.open(
+			baseURL + "?u=" + encodeURIComponent(u),
+			"_blank"
+		);
 	}
 }
 
@@ -165,11 +183,18 @@ $(function(){
 				let chosens = []
 				_.$container.find('.vote-btn.checked').each(function(k,v) {
 					var title = $(v).data('title')
-					window.dataLayer.push({'event': title});
 					chosens.push(title)
 				});
 
-				// send the request to server
+				// log this event
+				gtmTrack({
+					'category': 'Petitions',
+					'action': 'Vote',
+					'label': '2020 climate win',
+					'value' : chosens.join(",")
+				});
+
+				// send the request to server2
 				fetch(apiUrl+"?sheetName=votes", {
 					method: 'POST',
 					headers: {
@@ -208,7 +233,14 @@ $(function(){
 				if(text !== ''){
 					_.resetTyping();
 					$('#'+free_text_id).val(text);
-					window.dataLayer.push({'custom_vote': text});
+
+					// log event
+					gtmTrack({
+						'category': 'Petitions',
+						'action': 'Custom Vote',
+						'label': '2020 climate win',
+						'value' : text
+					});
 
 					// send to server
 					fetch(apiUrl+"?sheetName=notes", {
@@ -386,7 +418,7 @@ $(function(){
 				submitHandler: function(form) {
 					// do other things for a valid form
 					var temp = [];
-					window.dataLayer.push({'event': 'petitionSignup'});
+
 					$('#voting .option .vote-btn.checked').each(function(k,v) {
 						var id = $(v).data('id');
 						temp.push(id);
@@ -540,15 +572,15 @@ $(function(){
 				title: {text: ''},
 				xAxis: {
 					visible: true,
-			    labels: {
-			    	enabled: false
-			    }
+					labels: {
+						enabled: false
+					}
 				},
 				yAxis: {
 					visible: false,
-			    labels: {
-			    	enabled: false
-			    }
+					labels: {
+						enabled: false
+					}
 				},
 				tooltip: { enabled: false },
 				plotOptions: {},
@@ -559,17 +591,17 @@ $(function(){
 					colorByPoint: true,
 					keys: ['name', 'y', 'color'],
 					dataLabels: {
-				    enabled: true,
-				    color: '#FFFFFF',
-				    style: {fontSize: '1rem'},
-				    useHTML: true,
-				    formatter:function() {
-				      var pcnt = (this.y / this.series.data.map(p => p.y).reduce((a, b) => a + b, 0)) * 100;
-				      let checked = chosens.indexOf(this.point.name)>-1
-				      return `${checked ? '<i class="fas fa-check-circle"></i> ' : ''}${this.point.name} ${pcnt.toFixed(1)+"%"}` ;
-				    },
-				    inside: true,
-				    align: 'left'
+						enabled: true,
+						color: '#FFFFFF',
+						style: {fontSize: '1rem'},
+						useHTML: true,
+						formatter:function() {
+							var pcnt = (this.y / this.series.data.map(p => p.y).reduce((a, b) => a + b, 0)) * 100;
+							let checked = chosens.indexOf(this.point.name)>-1
+							return `${checked ? '<i class="fas fa-check-circle"></i> ' : ''}${this.point.name} ${pcnt.toFixed(1)+"%"}` ;
+						},
+						inside: true,
+						align: 'left'
 					},
 					data: resultData,
 					pointWidth: 50
