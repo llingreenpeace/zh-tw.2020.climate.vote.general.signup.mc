@@ -109,6 +109,13 @@ i {
   margin-top: 20vh;
 }
 
+
+.checkbox-field {
+  a {
+    text-decoration: underline;
+  }
+}
+
 @media (min-width: 1000px) {
   #voting .left-col p {
     padding: 0 30px;
