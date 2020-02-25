@@ -1033,7 +1033,8 @@ hr{
 #voting .callout{
     color:#434343;
     background:#eafff2;
-    text-align:center
+    text-align:center;
+    display: none;
 }
 #voting .callout h3{
     font-size:1.125em;
@@ -1493,7 +1494,7 @@ body.typing #typing-panel{
         bottom:0;
         width:65.7%;
         height:75px;
-        z-index:4
+        z-index:4;
     }
     #voting .callout h3{
         line-height:75px;
@@ -1516,7 +1517,7 @@ body.typing #typing-panel{
     }
     #voting .right-col{
         width:65.7%;
-        padding-bottom:75px
+        /*padding-bottom:75px*/
     }
     #voting .right-col .vote-btn{
         position:absolute;
@@ -1796,6 +1797,7 @@ body.typing #typing-panel{
     #voting .callout{
         padding:20px;
         padding-bottom: 100px;
+        display: block;
     }
     #voting .callout h3{
         margin-bottom:9px

@@ -496,6 +496,14 @@ $(function(){
 			this.map_init = true;
 		},
 		show: function(){
+			var _ = this;
+
+			// tigger the blur actions to make it has `filled` class.
+			_.$container.find('input, select').each((i, el) => {
+				console.log('blur', el, 'el.value', el.value)
+				$(el).blur()
+			})
+
 			return new Promise((resolve, reject) => {
 				var formTL = anime.timeline({
 					easing: 'easeOutQuart',
