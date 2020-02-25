@@ -500,7 +500,6 @@ $(function(){
 
 			// tigger the blur actions to make it has `filled` class.
 			_.$container.find('input, select').each((i, el) => {
-				console.log('blur', el, 'el.value', el.value)
 				$(el).blur()
 			})
 
