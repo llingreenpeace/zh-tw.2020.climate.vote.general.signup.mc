@@ -688,16 +688,25 @@ $(function(){
 
 			Highcharts.chart('chart', {
 				chart: {
-					plotShadow: false,
+					// plotShadow: false,
 					type: 'bar',
 					height: '400px',
 				},
 				title: {text: ''},
 				xAxis: {
-					visible: true,
+					categories: resultData.map((item) => { return item[0]}),
+					title: {
+						text: null
+					},
 					labels: {
-						enabled: false
-					}
+						x: 0,
+						y: -20,
+						align: 'left',
+						style: {
+							color: '#fff',
+							fontSize: '1rem'
+						}
+					},
 				},
 				yAxis: {
 					visible: false,
@@ -706,7 +715,18 @@ $(function(){
 					}
 				},
 				tooltip: { enabled: false },
-				plotOptions: {},
+				plotOptions: {
+					bar: {
+						dataLabels: {
+							enabled: true
+						}
+					},
+					series: {
+						pointWidth: 10,
+						groupPadding: 0.2,
+						pointPadding: 0.01
+					}
+				},
 				legend: {
 					enabled: false
 				},
@@ -721,13 +741,13 @@ $(function(){
 						formatter:function() {
 							var pcnt = (this.y / this.series.data.map(p => p.y).reduce((a, b) => a + b, 0)) * 100;
 							let checked = chosens.indexOf(this.point.name)>-1
-							return `${checked ? '<i class="fas fa-check-circle"></i> ' : ''}${this.point.name} ${pcnt.toFixed(1)+"%"}` ;
+							// return `${checked ? '<i class="fas fa-check-circle"></i> ' : ''}${this.point.name} ${pcnt.toFixed(1)+"%"}` ;
+							return `${checked ? '<i class="fas fa-check-circle"></i> ' : ''} ${pcnt.toFixed(1)+"%"}` ;
 						},
-						inside: true,
-						align: 'left'
+						inside: false,
 					},
 					data: resultData,
-					pointWidth: 50
+					pointWidth: 15
 				}]
 			});
 		},
@@ -807,8 +827,8 @@ $(function(){
 	// resolve which the current page is
 	const EN_PAGE_STATUS = resolveEnPagePetitionStatus()
 	console.log("EN_PAGE_STATUS", EN_PAGE_STATUS)
-	// if (EN_PAGE_STATUS==="FRESH") {
-	if (false) {
+	if (EN_PAGE_STATUS==="FRESH") {
+	// if (false) {
 		if($('#voting').length == 1){
 			votingPage.init();
 			formPage.init();
@@ -823,8 +843,8 @@ $(function(){
 		$(window).resize(function(){
 			if(introPage.active) introPage.resize();
 		});
-	// } else if (EN_PAGE_STATUS==="SUCC") {
-	} else if (true) {
+	} else if (EN_PAGE_STATUS==="SUCC") {
+	// } else if (true) {
 		pageHandler.goTo('#result', '#intro');
 		resultPage.init();
 	}
