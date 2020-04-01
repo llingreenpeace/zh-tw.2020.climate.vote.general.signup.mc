@@ -58,8 +58,8 @@
 							扭轉氣候危機<br />
 							你希望臺灣優先做出哪些改變？<br />
 							<br />
-							動動手指，勾選與您想法相符的選項<br>
-							或與我們 <a href="#" class="text-link typing-btn">分享其他有趣的想法</a>。
+							動動手指，勾選與您想法相符的選項。<br>
+							<!-- 或與我們 <a href="#" class="text-link typing-btn">分享其他有趣的想法</a> -->
 						</p>
 						<a href="#" class="btn btn2 next-btn hidden-m">確 定 投 票<span class='indicator'>(<span class="count">0</span>/3)</span></a>
 					</div>
@@ -187,10 +187,13 @@
 						</div>
 					</div>
 					<div class="callout clearfix">
-						<h3 class="">你有更大膽的想法嗎？歡迎告訴我們！</h3>
-						<a href="#" class="btn btn1 typing-btn">YES!</a>
+						<div class="marquee-left">
+							<p id="voting-page-marquee"></p>
+							<!-- 你有更大膽的想法嗎？歡迎告訴我們！ -->
+						</div>
+						<!-- <a href="#" class="btn btn1 typing-btn">YES!</a> -->
 					</div>
-					<a href="#" class="sticky-btn btn btn2 next-btn hidden-d">確 定 投 票<span class='indicator'>(<span class="count">0</span>/3)</span></a>
+					<!-- <a href="#" class="sticky-btn btn btn2 next-btn hidden-d">確 定 投 票<span class='indicator'>(<span class="count">0</span>/3)</span></a> -->
 				</div>
 				<div id="overlay"></div>
 				<div id="details">
@@ -213,7 +216,7 @@
 						</div>
 					</div>
 				</div>
-				<div id="typing-panel">
+				<!-- <div id="typing-panel">
 					<a href="#" class="close-btn">&#10005;</a>
 					<div class="content">
 						<div class="m-content">
@@ -227,7 +230,7 @@
 						</div>
 						<a href="#" id="type-next-btn" class="btn btn2">送出</a>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			<div id="form">
 				<div class="left-col">
@@ -280,6 +283,11 @@
 								<label for="fake_supporter_birthYear" class="" style="">出生年份</label>
 							</div>
 							<label id="fake_supporter_birthYear-error" class="error" for="fake_supporter_birthYear"></label>
+
+							<div class="form-field textarea-field mandatory">
+								<textarea id="fake_message" rows="8" class="fake_input" name="fake.supporter.message" placeholder="關於氣候危機，我還有話想說..."></textarea>
+							</div>
+							<label id="fake_supporter_message-error" class="error" for="fake_supporter_message"></label>
 
 							<div class="en__submit">
 								<button style="" class="btn btn2">OK</button>
@@ -335,6 +343,16 @@
 						<div id="chart-wrapper" class="">
 							<div id="chart">
 								<div class="lds-dual-ring"></div>
+							</div>
+						</div>
+						<div>
+							<h1>大家怎麼說？</h1>
+							<div class="marquee-top-container">
+								<div class="top-cover"></div>
+								<div class="marquee-top">
+									<p id="result-page-marquee"></p>
+								</div>
+								<div class="bottom-cover"></div>
 							</div>
 						</div>
 					</div>

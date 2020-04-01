@@ -2,13 +2,22 @@ import './all.css'
 import './main.scss'
 
 
+
+
+// mind NEEDBACK
+
+
+
+
+
+
 /**
  * This script use the google sheet as the DB
  */
 
 const {$, anime, autosize, Cookies, Highcharts, dataLayer} = window
-const apiUrl = "https://cors-anywhere.arpuli.com/https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec"
-// const apiUrl = "https://script.google.com/macros/s/AKfycbzRtGHGwTYjnzTUbYsSJSbWtYh7D47qGaSbLg-CeLq4v6xwWLI/exec" // test project
+// const apiUrl = "https://cors-anywhere.arpuli.com/https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec"
+const apiUrl = "https://cors-anywhere.small-service.gpeastasia.org/https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec" // test project
 
 var options_id = 'en__field_supporter_questions_288643'; // 選擇關心議題的 id
 
@@ -30,6 +39,65 @@ var resultData = [
 Object.assign($.validator.messages, {
 	required: "此項為必填"
 });
+/**
+ * getting user opinions (message)
+ * first ten -> random 10 old queries, which wont include newest 10
+ * and the following 20 will be newest 20, 30 queries in total.
+ * if data rows less than 30.
+ * 
+ */
+
+
+fetch(apiUrl+"?sheetName=notes")
+	.then(response => response.json())
+	.then(response => {
+		if (response.status==="OK") {
+			initVotingPageMarquee(response.values);
+			initResultPageMarquee(response.values);
+		} else {
+			console.error("Cannot fetch the pulling results")
+		}
+	})
+const initVotingPageMarquee = (values) => {
+	let result;
+	// console.log(values.random10Old);
+	// console.log(values.newest20);
+	let oldMessages = shuffleArray(values.random10Old);
+	let newMessages = shuffleArray(values.newest20.slice(10,21));
+	result = newMessages.concat(oldMessages);
+	
+	console.log(result);
+	let htmlString = '';
+	for(let index in result) {
+		let item = result[index];
+		htmlString += `<strong>${item.last_name}***</strong>:“${item.message.trim()}” &nbsp;`;
+		if ((index + 1) % 3 === 0) {
+			htmlString += ` 立即投票，留下想說的話 &nbsp; `;
+		}
+	}
+	$('#voting-page-marquee').html(htmlString);
+}
+const initResultPageMarquee = (values) => {
+	let result = values.newest20.reverse();
+	// console.log(values);
+	// console.log(result);
+	let htmlString = '';
+	for(let index in result) {
+		let item = result[index];
+		htmlString += `<strong>${item.last_name}***</strong>:“${item.message.trim()}” <br><br>`;
+	}
+	$('#result-page-marquee').html(htmlString);
+	$('.marquee-top-container').fadeIn();
+}
+const shuffleArray =(array) => {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+	}
+	return array
+}
 
 /**
  * Resolve the en page status by checking the pageJson
@@ -226,6 +294,7 @@ $(function(){
 			// auto-height the textarea
 			autosize($('#typing-panel textarea').get(0));
 
+			// TODO: 
 			// bind submit event for the typing-panel
 			$('#type-next-btn').click(function(e){
 				e.preventDefault();
@@ -472,7 +541,24 @@ $(function(){
 					} else {
 						$('#'+nro_data_ok_id).prop( "checked", false );
 					}
-					$("form.en__component--page").submit();
+
+					// handling opinion submit
+					let message = $('#fake_message').val().trim();
+					let last_name = $('#fake_supporter_lastName').val();
+					console.log(message);
+
+					fetch(apiUrl+"?sheetName=notes", {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							rows: [{ip:ip, message, last_name}]
+						})
+					})
+
+					// $("form.en__component--page").submit(); // NEEDBACK
+
 				},
 				invalidHandler: function(event, validator) {
 					// 'this' refers to the form
@@ -721,7 +807,8 @@ $(function(){
 	// resolve which the current page is
 	const EN_PAGE_STATUS = resolveEnPagePetitionStatus()
 	console.log("EN_PAGE_STATUS", EN_PAGE_STATUS)
-	if (EN_PAGE_STATUS==="FRESH") {
+	// if (EN_PAGE_STATUS==="FRESH") {
+	if (false) {
 		if($('#voting').length == 1){
 			votingPage.init();
 			formPage.init();
@@ -736,7 +823,8 @@ $(function(){
 		$(window).resize(function(){
 			if(introPage.active) introPage.resize();
 		});
-	} else if (EN_PAGE_STATUS==="SUCC") {
+	// } else if (EN_PAGE_STATUS==="SUCC") {
+	} else if (true) {
 		pageHandler.goTo('#result', '#intro');
 		resultPage.init();
 	}
