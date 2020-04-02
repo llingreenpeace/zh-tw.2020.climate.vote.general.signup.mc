@@ -1934,6 +1934,10 @@ body.typing #typing-panel{
 }
 
 /* 20200330 added by garry */
+.mandatory > label::after { 
+    content: "*";
+    color: red;
+}
 .marquee-left {
     width: 100%;
     line-height: 50px;

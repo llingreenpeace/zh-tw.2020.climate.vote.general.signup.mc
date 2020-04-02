@@ -247,9 +247,9 @@
 						<form id="fake-form">
 							<input type="hidden" name="options" value="" />
 
-							<div class="form-field text-field  mandatory">
+							<div class="form-field text-field mandatory">
 								<input id="fake_supporter_emailAddress" type="email" class="fake_input" name="fake.supporter.emailAddress" value="" required />
-								<label for="fake_supporter_emailAddress" class="" style="">電子信箱</label>
+								<label for="fake_supporter_emailAddress" class="email-autocomplete-label" style="">電子信箱</label>
 							</div>
 							<label id="fake_supporter_emailAddress-error" class="error" for="fake_supporter_emailAddress"></label>
 
@@ -285,7 +285,7 @@
 							<label id="fake_supporter_birthYear-error" class="error" for="fake_supporter_birthYear"></label>
 
 							<div class="form-field textarea-field mandatory">
-								<textarea id="fake_message" rows="8" class="fake_input" name="fake.supporter.message" placeholder="關於氣候危機，我還有話想說..."></textarea>
+								<textarea id="fake_message" rows="8" class="fake_input fake_message" name="fake.supporter.message" placeholder="關於氣候危機，我還有話想說..." required></textarea>
 							</div>
 							<label id="fake_supporter_message-error" class="error" for="fake_supporter_message"></label>
 
@@ -495,6 +495,52 @@
 	</div>
 	<script src="%PUBLIC_URL%/plugins.1.js?v=1537759485000"></script>
 	<script src="%PUBLIC_URL%/plugins.2.js?v=1537759491000"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/email-autocomplete/0.1.3/jquery.email-autocomplete.min.js"></script>
+	<script>
+		/**
+		 * email auto complete
+		 */
+		 (function($){
+			$(function() {
+				$("#fake_supporter_emailAddress").emailautocomplete({
+					domains: [
+						"gmail.com",
+						"googlemail.com",
+						"yahoo.com",
+						"yahoo.co.uk",
+						"hotmail.com",
+						"hotmail.co.uk",
+						"live.com",
+						"msn.com",
+						"comcast.net",
+						"sbcglobal.net",
+						"verizon.net",
+						"facebook.com",
+						"outlook.com",
+						"att.net",
+						"gmx.com",
+						"icloud.com",
+						"me.com",
+						"mac.com",
+						"aol.com",
+					], //add your own domains
+					// suggClass: "eac-input-wrap",
+				});
+				$(".eac-input-wrap").css('width', "100%");
+				$("#fake_supporter_emailAddress").focus(function() {
+					$(".email-autocomplete-label").css('transform', "translate(-12px, -22px) scale(0.7)");
+				});
+				$("#fake_supporter_emailAddress").focusout(function() {
+					if (!$('#fake_supporter_emailAddress').val()) {
+						$(".email-autocomplete-label").css('transform', "translate(0, -12px)");
+					}
+				});
+				$(".eac-sugg").css('color', "#a0a0a0");
+				$(".eac-sugg").css('top', "5px");
+
+			});
+		}(jQuery));
+	</script>
 </body>
 
 </html>

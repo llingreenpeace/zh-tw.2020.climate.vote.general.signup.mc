@@ -1,7 +1,7 @@
 import './all.css'
 import './main.scss'
-
-
+// import emailautocomplete from 'js-email-autocomplete'
+// console.log(emailautocomplete)
 
 
 // mind NEEDBACK
@@ -39,6 +39,7 @@ var resultData = [
 Object.assign($.validator.messages, {
 	required: "此項為必填"
 });
+
 /**
  * getting user opinions (message)
  * first ten -> random 10 old queries, which wont include newest 10
@@ -46,8 +47,6 @@ Object.assign($.validator.messages, {
  * if data rows less than 30.
  * 
  */
-
-
 fetch(apiUrl+"?sheetName=notes")
 	.then(response => response.json())
 	.then(response => {
@@ -451,7 +450,6 @@ $(function(){
 			var _ = this;
 			_.$container = $('#form');
 
-
 			_.$container.find('input, select').bind('change blur', function(){
 				if($(this).attr('id') == 'fake_optin') {
 					if(document.getElementById('fake_optin').checked){
@@ -498,13 +496,13 @@ $(function(){
 			$.validator.addMethod(
 				"taiwan-phone",
 				function (value, element) {
-					console.log('do vlaidate')
+					console.log('do validate')
 					return this.optional(element) || /^[\d \-+]{7,15}$/i.test(value);
 				},
 				"電話格式不正確，請只輸入數字 0912345678 或 02-12345678")
 
 			$.validator.addClassRules({ // connect it to a css class
-			    "taiwan-phone" : { "taiwan-phone" : true }
+				"taiwan-phone" : { "taiwan-phone" : true }
 			});
 
 
@@ -564,10 +562,10 @@ $(function(){
 					// 'this' refers to the form
 					var errors = validator.numberOfInvalids();
 					if (errors) {
+						// console.log(errors)
 						var message = errors == 1
 							? 'You missed 1 field. It has been highlighted'
 							: 'You missed ' + errors + ' fields. They have been highlighted';
-						// alert(message);
 						$("div.error").show();
 					} else {
 						$("div.error").hide();

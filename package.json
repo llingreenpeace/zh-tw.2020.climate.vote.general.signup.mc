@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "gpea-npm-en-uploader": "greenpeace/gpea-npm-en-uploader"
+    "email-autocomplete": "^0.2.0",
+    "gpea-npm-en-uploader": "greenpeace/gpea-npm-en-uploader",
+    "js-email-autocomplete": "^1.0.3"
   },
   "devDependencies": {
     "node-sass": "^4.13.1",
