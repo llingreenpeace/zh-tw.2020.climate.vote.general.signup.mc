@@ -1,15 +1,5 @@
 import './all.css'
 import './main.scss'
-// import emailautocomplete from 'js-email-autocomplete'
-// console.log(emailautocomplete)
-
-
-// mind NEEDBACK
-
-
-
-
-
 
 /**
  * This script use the google sheet as the DB
@@ -65,7 +55,7 @@ const initVotingPageMarquee = (values) => {
 	let newMessages = shuffleArray(values.newest20.slice(10,21));
 	result = newMessages.concat(oldMessages);
 	
-	console.log(result);
+	// console.log(result);
 	let htmlString = '';
 	for(let index in result) {
 		let item = result[index];
@@ -105,8 +95,8 @@ const shuffleArray =(array) => {
  */
 const resolveEnPagePetitionStatus = () => {
 	let status = "FRESH";
-
-	if (window.pageJson.pageNumber === 2) {
+	// console.log(window);
+	if (window.pageJson.pageNumber === 1) {
 		status = "SUCC"; // succ page
 	} else {
 		status = "FRESH"; // start page
@@ -543,7 +533,8 @@ $(function(){
 					// handling opinion submit
 					let message = $('#fake_message').val().trim();
 					let last_name = $('#fake_supporter_lastName').val();
-					console.log(message);
+					let email = $('#fake_supporter_emailAddress').val();
+					// console.log(message);
 
 					fetch(apiUrl+"?sheetName=notes", {
 						method: 'POST',
@@ -551,11 +542,11 @@ $(function(){
 							'Content-Type': 'application/json'
 						},
 						body: JSON.stringify({
-							rows: [{ip:ip, message, last_name}]
+							rows: [{ip:ip, message, last_name, email}]
 						})
 					})
 
-					// $("form.en__component--page").submit(); // NEEDBACK
+					$("form.en__component--page").submit();
 
 				},
 				invalidHandler: function(event, validator) {
@@ -643,6 +634,7 @@ $(function(){
 		init: function(){
 			var _ = this;
 
+			_.resize();
 			$('body').removeClass('intro');
 
 			_.fetchChartData()
@@ -749,7 +741,21 @@ $(function(){
 				}]
 			});
 		},
+		resize: function(){
+			if ($(window).width() < 1000) {
+				$('#result>.left-col').insertAfter('#result>.right-col');
+			} else {
+				$('#result>.right-col').insertAfter('#result>.left-col');
+			}
+		},
 		show: function(){
+			
+			$('.share-btn-copy').html($('#result>.right-col>.content>.btns').clone());
+			if ($(window).width() < 1000) {
+				$('#result>.left-col').insertAfter('#result>.right-col');
+			} else {
+				$('#result>.right-col').insertAfter('#result>.left-col');
+			}
 			return new Promise((resolve, reject) => {
 			var formTL = anime.timeline({
 				easing: 'easeOutQuart',
