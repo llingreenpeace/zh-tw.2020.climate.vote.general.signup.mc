@@ -1,3 +1,7 @@
+# Constants
+
+* Campaign Name: `2020-climate-vote`
+
 ## Links
 
 * Petition Page of this project: [https://act.greenpeace.org/page/55747/petition/1](https://act.greenpeace.org/page/55747/petition/1)
