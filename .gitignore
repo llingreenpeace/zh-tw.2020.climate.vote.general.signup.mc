@@ -3,8 +3,5 @@ node_modules
 *.lock
 *error.log
 
-.enuploader
 chromedriver
-package-lock.json
-
 build
