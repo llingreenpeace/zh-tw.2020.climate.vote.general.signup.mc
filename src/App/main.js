@@ -35,7 +35,7 @@ Object.assign($.validator.messages, {
  * first ten -> random 10 old queries, which wont include newest 10
  * and the following 20 will be newest 20, 30 queries in total.
  * if data rows less than 30.
- * 
+ *
  */
 fetch(apiUrl+"?sheetName=notes", {
 	headers: {
@@ -57,7 +57,7 @@ const initVotingPageMarquee = (values) => {
 	let oldMessages = shuffleArray(values.random10Old);
 	let newMessages = shuffleArray(values.newest20.slice(10,21));
 	result = newMessages.concat(oldMessages);
-	
+
 	// console.log(result);
 	let htmlString = '';
 	for(let index in result) {
@@ -74,7 +74,7 @@ const initVotingPageMarquee = (values) => {
 	// } else {
 	// 	$(".marquee-left p").css("animation", "marquee-left 180s linear infinite");
 	// }
-	
+
 }
 const initResultPageMarquee = (values) => {
 	let result = values.newest20.reverse();
@@ -141,14 +141,14 @@ window.share = () => {
 			.share({
 				title: "2020 我希望臺灣優先採取的氣候行動是...",
 				text: "節能減碳不是一個人的事！臺灣能如何扭轉氣候危機？立即分享你的想法，群策群力、守護地球！",
-				url: "https://act.gp/2V5ZyTC"
+				url: "https://act.greenpeace.org/page/55747/petition/1?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_social_share"
 			})
 			.then(() => console.log("Successfully shared"))
 			.catch(error => console.log("Error sharing:", error));
 	} else {
 		// provide a fallback here
 		var baseURL = "https://www.facebook.com/sharer/sharer.php";
-		var u = "https://act.gp/2V5ZyTC";
+		var u = "https://act.greenpeace.org/page/55747/petition/1?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_social_share";
 		console.log('open', baseURL + "?u=" + encodeURIComponent(u))
 		window.open(
 			baseURL + "?u=" + encodeURIComponent(u),
@@ -255,9 +255,9 @@ $(function(){
 
 				// log this event
 				gtmTrack({
-					'category': 'Petitions',
-					'action': 'Vote',
-					'label': '2020 climate win',
+					'category': 'petitions',
+					'action': 'vote',
+					'label': '2020-climate-vote',
 					'value' : chosens.join(",")
 				});
 
@@ -290,7 +290,7 @@ $(function(){
 			// auto-height the textarea
 			autosize($('#typing-panel textarea').get(0));
 
-			// TODO: 
+			// TODO:
 			// bind submit event for the typing-panel
 			$('#type-next-btn').click(function(e){
 				e.preventDefault();
@@ -301,9 +301,9 @@ $(function(){
 
 					// log event
 					gtmTrack({
-						'category': 'Petitions',
-						'action': 'Custom Vote',
-						'label': '2020 climate win',
+						'category': 'petitions',
+						'action': 'custom vote',
+						'label': '2020-climate-vote',
 						'value' : text
 					});
 
@@ -645,7 +645,7 @@ $(function(){
 			var _ = this;
 
 			$('body').removeClass('intro');
-			
+
 			_.fetchResultMarquee();
 			_.fetchChartData()
 				.then(() => {_.renderChart()})
@@ -697,7 +697,7 @@ $(function(){
 				},
 				title: {text: ''},
 				xAxis: {
-					categories: resultData.map((item) => { 
+					categories: resultData.map((item) => {
 						let checked = chosens.indexOf(item[0])>-1;
 						return `<span style="white-space: nowrap;">${checked ? '<i class="fas fa-check-circle"></i> ' : ''} ${item[0]}</span>`
 					}),
@@ -780,7 +780,7 @@ $(function(){
 			}
 		},
 		show: function(){
-			
+
 			$('.share-btn-copy').html($('#result>.right-col>.content>.btns').clone());
 			if ($(window).width() < 1000) {
 				$('#result>.left-col').insertAfter('#result>.right-col');
