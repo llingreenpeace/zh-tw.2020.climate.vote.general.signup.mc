@@ -6,8 +6,8 @@ import './main.scss'
  */
 
 const {$, anime, autosize, Cookies, Highcharts, dataLayer} = window
-// const apiUrl = "https://cors-anywhere.arpuli.com/https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec"
-const apiUrl = "https://cors-anywhere.small-service.gpeastasia.org/https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec" // test project
+const apiUrl = "https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec"
+// const apiUrl = "https://cors-anywhere.small-service.gpeastasia.org/https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec" // test project
 
 var options_id = 'en__field_supporter_questions_288643'; // 選擇關心議題的 id
 
@@ -37,12 +37,15 @@ Object.assign($.validator.messages, {
  * if data rows less than 30.
  * 
  */
-fetch(apiUrl+"?sheetName=notes")
-	.then(response => response.json())
+fetch(apiUrl+"?sheetName=notes", {
+	headers: {
+		// "X-Requested-With": "XMLHttpRequest"
+	}
+}).then(response => response.json())
 	.then(response => {
 		if (response.status==="OK") {
 			initVotingPageMarquee(response.values);
-			initResultPageMarquee(response.values);
+			// initResultPageMarquee(response.values);
 		} else {
 			console.error("Cannot fetch the pulling results")
 		}
@@ -65,6 +68,13 @@ const initVotingPageMarquee = (values) => {
 		}
 	}
 	$('#voting-page-marquee').html(htmlString);
+	$(".marquee-left p").css("animation", "marquee-left 180s linear infinite");
+	// if ($(window).width() < 1000) {
+	// 	$(".marquee-left p").css("animation", "marquee-left 180s linear infinite");
+	// } else {
+	// 	$(".marquee-left p").css("animation", "marquee-left 180s linear infinite");
+	// }
+	
 }
 const initResultPageMarquee = (values) => {
 	let result = values.newest20.reverse();
@@ -96,7 +106,7 @@ const shuffleArray =(array) => {
 const resolveEnPagePetitionStatus = () => {
 	let status = "FRESH";
 	// console.log(window);
-	if (window.pageJson.pageNumber === 1) {
+	if (window.pageJson.pageNumber === 2) {
 		status = "SUCC"; // succ page
 	} else {
 		status = "FRESH"; // start page
@@ -131,14 +141,14 @@ window.share = () => {
 			.share({
 				title: "2020 我希望臺灣優先採取的氣候行動是...",
 				text: "節能減碳不是一個人的事！臺灣能如何扭轉氣候危機？立即分享你的想法，群策群力、守護地球！",
-				url: "https://act.gp/32dQkaT"
+				url: "https://act.gp/2V5ZyTC"
 			})
 			.then(() => console.log("Successfully shared"))
 			.catch(error => console.log("Error sharing:", error));
 	} else {
 		// provide a fallback here
 		var baseURL = "https://www.facebook.com/sharer/sharer.php";
-		var u = "https://act.gp/32dQkaT";
+		var u = "https://act.gp/2V5ZyTC";
 		console.log('open', baseURL + "?u=" + encodeURIComponent(u))
 		window.open(
 			baseURL + "?u=" + encodeURIComponent(u),
@@ -254,9 +264,6 @@ $(function(){
 				// send the request to server2
 				fetch(apiUrl+"?sheetName=votes", {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
 					body: JSON.stringify({
 						rows: [
 							{
@@ -303,9 +310,6 @@ $(function(){
 					// send to server
 					fetch(apiUrl+"?sheetName=notes", {
 						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
 						body: JSON.stringify({
 							rows: [{ip:ip, message: text}]
 						})
@@ -538,9 +542,6 @@ $(function(){
 
 					fetch(apiUrl+"?sheetName=notes", {
 						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
 						body: JSON.stringify({
 							rows: [{ip:ip, message, last_name, email}]
 						})
@@ -634,9 +635,9 @@ $(function(){
 		init: function(){
 			var _ = this;
 
-			_.resize();
 			$('body').removeClass('intro');
-
+			
+			_.fetchResultMarquee();
 			_.fetchChartData()
 				.then(() => {_.renderChart()})
 				.then(() => {this.show()})
@@ -650,8 +651,11 @@ $(function(){
 				})
 			}
 
-			return fetch(apiUrl+"?sheetName=votes_summary")
-				.then(response => response.json())
+			return fetch(apiUrl+"?sheetName=votes_summary", {
+				headers: {
+					// "X-Requested-With": "XMLHttpRequest"
+				}
+			}).then(response => response.json())
 				.then(response => {
 					if (response.status==="OK") {
 						_.chartDateFetched = true;
@@ -684,18 +688,22 @@ $(function(){
 				},
 				title: {text: ''},
 				xAxis: {
-					categories: resultData.map((item) => { return item[0]}),
+					categories: resultData.map((item) => { 
+						let checked = chosens.indexOf(item[0])>-1;
+						return `<span style="white-space: nowrap;">${checked ? '<i class="fas fa-check-circle"></i> ' : ''} ${item[0]}</span>`
+					}),
 					title: {
 						text: null
 					},
 					labels: {
-						x: 0,
+						x: 10,
 						y: -20,
 						align: 'left',
 						style: {
 							color: '#fff',
 							fontSize: '1rem'
-						}
+						},
+						useHTML: true,
 					},
 				},
 				yAxis: {
@@ -730,9 +738,9 @@ $(function(){
 						useHTML: true,
 						formatter:function() {
 							var pcnt = (this.y / this.series.data.map(p => p.y).reduce((a, b) => a + b, 0)) * 100;
-							let checked = chosens.indexOf(this.point.name)>-1
+							// let checked = chosens.indexOf(this.point.name)>-1
 							// return `${checked ? '<i class="fas fa-check-circle"></i> ' : ''}${this.point.name} ${pcnt.toFixed(1)+"%"}` ;
-							return `${checked ? '<i class="fas fa-check-circle"></i> ' : ''} ${pcnt.toFixed(1)+"%"}` ;
+							return `${pcnt.toFixed(1)+"%"}` ;
 						},
 						inside: false,
 					},
@@ -740,6 +748,20 @@ $(function(){
 					pointWidth: 15
 				}]
 			});
+		},
+		fetchResultMarquee: () => {
+			fetch(apiUrl+"?sheetName=notes", {
+				headers: {
+					// "X-Requested-With": "XMLHttpRequest"
+				}
+			}).then(response => response.json())
+				.then(response => {
+					if (response.status==="OK") {
+						initResultPageMarquee(response.values);
+					} else {
+						console.error("Cannot fetch the pulling results")
+					}
+				})
 		},
 		resize: function(){
 			if ($(window).width() < 1000) {

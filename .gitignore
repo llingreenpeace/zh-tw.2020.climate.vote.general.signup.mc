@@ -6,3 +6,5 @@ node_modules
 .enuploader
 chromedriver
 package-lock.json
+
+build

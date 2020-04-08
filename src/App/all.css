@@ -564,6 +564,7 @@ form.en__component{
 .textarea-field > textarea {
     width: 100%;
     border: none;
+    padding: 11px 22px 1px;
 }
 
 .checkbox-field label{
@@ -1499,7 +1500,7 @@ body.typing #typing-panel{
         left:34.3%;
         bottom:0;
         width:65.7%;
-        height:75px;
+        height:50px;
         z-index:4;
     }
     #voting .callout h3{
@@ -1523,7 +1524,7 @@ body.typing #typing-panel{
     }
     #voting .right-col{
         width:65.7%;
-        padding-bottom:75px
+        padding-bottom:50px
     }
     #voting .right-col .vote-btn{
         position:absolute;
@@ -1763,7 +1764,7 @@ body.typing #typing-panel{
         padding:15px 15px
     }
     #voting,#form,#result{
-        padding-top:100px
+        padding-top: 0px !important;
     }
     #voting h3{
         font-size:1.7em;
@@ -1949,7 +1950,9 @@ body.typing #typing-panel{
 .marquee-left p {
     display: inline-block;
     padding-left: 50%;
-    animation: marquee-left 180s linear infinite;
+    /* animation: marquee-left 180s linear infinite; */
+    animation-delay: 1.5s;
+    margin: unset !important;
 }
 .marquee-top-container {
     margin-bottom: 30px;
