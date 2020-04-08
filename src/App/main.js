@@ -490,15 +490,20 @@ $(function(){
 			$.validator.addMethod(
 				"taiwan-phone",
 				function (value, element) {
-					console.log('do validate')
-					return this.optional(element) || /^[\d \-+]{7,15}$/i.test(value);
+					// console.log('do validate')
+					console.log('phone required :', $('#fake_supporter_phoneNumber').prop('required'));
+					if ($('#fake_supporter_phoneNumber').prop('required')) {
+						return this.optional(element) || /^[\d \-+]{7,15}$/i.test(value);
+					} else if ($('#fake_supporter_phoneNumber').val()) {
+						return this.optional(element) || /^[\d \-+]{7,15}$/i.test(value);
+					}
+					return true
 				},
 				"電話格式不正確，請只輸入數字 0912345678 或 02-12345678")
 
 			$.validator.addClassRules({ // connect it to a css class
 				"taiwan-phone" : { "taiwan-phone" : true }
 			});
-
 
 			$("#fake-form").validate({
 				errorPlacement: function(error, element) {
@@ -520,7 +525,11 @@ $(function(){
 					$('#en__field_supporter_lastName').val($('#fake_supporter_lastName').val());
 					$('#en__field_supporter_emailAddress').val($('#fake_supporter_emailAddress').val());
 
-					$('#en__field_supporter_phoneNumber').val($('#fake_supporter_phoneNumber').val());
+					if (!$('#fake_supporter_phoneNumber').prop('required') && !$('#fake_supporter_phoneNumber').val()) {
+						$('#en__field_supporter_phoneNumber').val('0900000000');
+					} else {
+						$('#en__field_supporter_phoneNumber').val($('#fake_supporter_phoneNumber').val());
+					}
 					$('#en__field_supporter_NOT_TAGGED_6').val($('#fake_supporter_birthYear').val());
 
 					if(document.getElementById('fake_optin').checked) {
