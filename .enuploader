@@ -16,7 +16,7 @@ module.exports = {
 	ftp: Object.assign({}, secrets["ftp_tw"], { // EDIT_HERE: Which ftp site you want to use
 		"execute": true,
 		"localDir": buildDirPath,
-		"remoteDir": "/htdocs/2020/petition/zh-tw.2020.climate.vote", // EDIT_HERE
+		"remoteDir": "/htdocs/2020/petition/zhtw.2020.climate.vote", // EDIT_HERE
 	}),
 
 	enBase: Object.assign({}, secrets["en"], {
@@ -31,8 +31,8 @@ module.exports = {
 	},
 
 	enThankYouEmail: {
-		"execute": false,
+		"execute": true,
 		"enPageId": enPageId,
-		"mailPath": "src/ThankyouEmail.html", // EDIT_HERE: the path to your email template
+		"mailPath": "email.html", // EDIT_HERE: the path to your email template
 	}
 }

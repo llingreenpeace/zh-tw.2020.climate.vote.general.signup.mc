@@ -2010,3 +2010,7 @@ body.typing #typing-panel{
         display: unset;
     }
 }
+
+.form-field > label:nth-child(3) {
+    display: none;
+}
