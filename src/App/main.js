@@ -133,25 +133,33 @@ const gtmTrack = ({category, action, label, value}) => {
 	});
 }
 
-window.share = () => {
+window.share = (page) => {
 	// WEB SHARE API
+
+	var url = "https://act.greenpeace.org/page/55747/petition/1?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_social_share";
+	var FBShareUrl = "https://act.gp/2Kslfbf";
+	if (page === "tkpage") {
+		url = "https://act.greenpeace.org/page/55747/petition/1?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_petition_tkpage";
+		FBShareUrl = "https://act.gp/2Vp03cv";
+	}
+
 	if (navigator.share) {
 		// we can use web share!
 		navigator
 			.share({
 				title: "2020 我希望臺灣優先採取的氣候行動是...",
 				text: "節能減碳不是一個人的事！臺灣能如何扭轉氣候危機？立即分享你的想法，群策群力、守護地球！",
-				url: "https://act.greenpeace.org/page/55747/petition/1?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_social_share"
+				url: url
 			})
 			.then(() => console.log("Successfully shared"))
 			.catch(error => console.log("Error sharing:", error));
 	} else {
 		// provide a fallback here
 		var baseURL = "https://www.facebook.com/sharer/sharer.php";
-		var u = "https://act.greenpeace.org/page/55747/petition/1?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_social_share";
-		console.log('open', baseURL + "?u=" + encodeURIComponent(u))
+		// var u = FBShareUrl;
+		console.log('open', baseURL + "?u=" + encodeURIComponent(FBShareUrl))
 		window.open(
-			baseURL + "?u=" + encodeURIComponent(u),
+			baseURL + "?u=" + encodeURIComponent(FBShareUrl),
 			"_blank"
 		);
 	}
