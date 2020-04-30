@@ -659,19 +659,6 @@ $(function(){
 				.then(() => {_.renderChart()})
 				.then(() => {this.show()})
 
-			// yahoo tracking
-			window.dotq = window.dotq || [];
-			window.dotq.push({
-				'projectId': '10000',
-				'properties': {
-					'pixelId': '10094925',
-					'qstrings': {
-					'et': 'custom',
-					'ea': 'submit'
-					}
-				} 
-			});
-
 		},
 		fetchChartData: () => {
 			var _ = this;
