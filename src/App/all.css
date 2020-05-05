@@ -1517,7 +1517,7 @@ body.typing #typing-panel{
         padding:0 40px
     }
     #voting .left-col p{
-        padding:0 50px
+        padding:0 15px
     }
     #voting .left-col .next-btn.show{
         display:inline-block
