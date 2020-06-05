@@ -50,21 +50,23 @@
 						<img src="%PUBLIC_URL%/2020-vote-for-climate.png?v=123" alt="2020 氣候要贏" class="out">
 						<hr class="out" />
 						<p class="out">
+							疫情過後，氣候變遷就是下一個全球危機<br />
+							臺灣，能成為亞洲第一個提出聯合國建議減碳目標的政府嗎？<br />
+							我們又該優先採取那些氣候部署？<br />
+							<br />
+							立即投票並加入連署<br />
+							綠色和平將寄給愛地球的您<br />
+							14 天免費觀看線上環境影展序號<br />
+							<br />
+							＊數量有限發完為止＊
+<!-- 
 							企業、政府，節能減碳動起來<br />
 							扭轉「氣候危機」<br />
 							你希望臺灣優先做出哪些改變？<br />
 							<br />
 							動動手指，勾選與您想法相符的選項。<br />
 							您的一票將成為我們專案溝通上的重要參考<br />
-							也是綠色和平與政府/企業遊說的堅強後盾！
-							<!-- 節能減碳不是一個人的責任<br />
-							企業、政府，大家一起來！<br />
-							扭轉氣候危機<br />
-							你希望臺灣優先做出哪些改變？<br />
-							<br />
-							動動手指，勾選與您想法相符的選項。<br />
-							您的一票將成為我們專案溝通上的重要參考！<br /> -->
-							<!-- 或與我們 <a href="#" class="text-link typing-btn">分享其他有趣的想法</a> -->
+							也是綠色和平與政府/企業遊說的堅強後盾！ -->
 						</p>
 						<a href="#" class="btn btn2 next-btn hidden-m">確 定 投 票<span class='indicator'>(<span class="count">0</span>/3)</span></a>
 					</div>
@@ -241,16 +243,19 @@
 					<div class="content">
 						<h2 class="sp-title">
 							<!-- <img src="%PUBLIC_URL%/loading.png?v=123" class="loading-image" alt="正在更新投票結果…"> -->
-							<span class="word">邀請您成為氣候支持者</span>
+							<span class="word">最後倒數！讓臺灣贏得世界的注視</span>
 						</h2>
-						<p class="out">
-							<!-- 等待時間也不浪費！<br>
-							你願意花 1 分鐘時間<br>
-							成為綠色和平的氣候專案支持者？ -->
-							解決氣候危機 並非一蹴可幾<br />
-							我們需要您長期的聲援與關注<br />
-							邀請您動動手指加入我們<br />
-							推動改變，缺你不可！
+						<div class="progress-bar-container">
+							<div id="container"></div>
+						</div>
+						<p class="out" style="text-align: left; padding: 0 20px;">
+							無論您的選擇為何，
+							<strong>在臺灣，製造部門的碳排放量佔全臺超過一半以上，企業應該與民眾共抗全球危機</strong><br />
+							因此，應對氣候危機，當務之急是要求政府立法管制大型企業的總排放量，
+							強制用電大戶共同分擔 20% 的再生能源，與民眾一起減少碳排放。<br />
+							<br />
+							環保署正在蒐集民間意見，作為《溫室氣體減量及管理法》的修法方向，6 月 30 日以前，
+							綠色和平要號召 5,000 位民眾<strong>一同遞交下列意見</strong>，請您留下姓名，由你決定臺灣應對氣候危機的高度。
 						</p>
 						<form id="fake-form">
 							<input type="hidden" name="options" value="" />
@@ -293,12 +298,21 @@
 							<label id="fake_supporter_birthYear-error" class="error" for="fake_supporter_birthYear"></label>
 
 							<div class="form-field textarea-field">
-								<textarea id="fake_message" rows="8" class="fake_input fake_message" name="fake.supporter.message" placeholder="關於氣候危機，我還有話想說..."></textarea>
+								<textarea id="fake_message" readonly rows="8" class="fake_input fake_message" name="fake.supporter.message" placeholder="關於氣候危機，我還有話想說..."></textarea>
 							</div>
 							<label id="fake_supporter_message-error" class="error" for="fake_supporter_message"></label>
 
 							<div class="en__submit">
 								<button style="" class="btn btn2">OK</button>
+							</div>
+							<div class="form-field checkbox-field">
+								<div class="checkbox">
+									<input id="fake_opinionSubmit" type="checkbox" class="fake_input" name="fake.supporter.opinionSubmit" value="" checked />
+									<div class="fake-cb"></div>
+								</div>
+								<label for="fake_opinionSubmit" class="" style="">
+									我同意綠色和平代我將以上意見遞交給環保署
+								</label>
 							</div>
 							<div class="form-field checkbox-field">
 								<div class="checkbox">
@@ -326,7 +340,8 @@
 				<!--end of .left-col-->
 				<div class="right-col">
 					<div class="content">
-						<h3 class="b">成為氣候專案支持者，你可以…</h3>
+						<img src="https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote/previews/free-movie.jpg" alt="" width="100%">
+						<!-- <h3 class="b">成為氣候專案支持者，你可以…</h3>
 						<div class="you-can-panel">
 							<div class="you-can">
 								<img src="%PUBLIC_URL%/icon/news.png?v=123" alt="定期收到國內外氣候相關最新資訊">
@@ -340,7 +355,7 @@
 								<img src="%PUBLIC_URL%/icon/conversation.png?v=123" alt="有機會參與綠色和平氣候專案討論">
 								<div class="text-part">有機會參與綠色和平氣候專案討論</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<!--end of .right-col-->
@@ -349,15 +364,24 @@
 				<div class="left-col">
 					<div class="content">
 						<h2 class="sp-title">
-							謝謝你參與討論！<br>
-							其他人也想看見這些改變：
+							<!-- 謝謝你參與討論！<br>
+							其他人也想看見這些改變： -->
+							感謝您的加入！
 						</h2>
-						<div id="chart-wrapper" class="">
+						<p class="out" style="text-align: left;">
+							若您於前頁勾選「我同意綠色和平代我將以上意見遞交給環保署」，
+							您將於 3 - 5 天後，收到一封來自問卷調查公司 SurveyCake 的系統通知信（如下圖），
+							此封信係為綠色和平成功以您之名代為遞交氣候政策修改建議至環保署問卷調查平台，如收到此信請無須驚慌，亦無須回覆。
+						</p>
+						<div class="content-img">
+							<img src="https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote/previews/surveycake-preview.png" alt="">
+						</div>
+						<div id="chart-wrapper" class="" style="display: none;">
 							<div id="chart">
 								<div class="lds-dual-ring"></div>
 							</div>
 						</div>
-						<div>
+						<div style="display: none;">
 							<h1>大家怎麼說？</h1>
 							<div class="marquee-top-container">
 								<div class="top-cover"></div>
@@ -367,9 +391,9 @@
 								<div class="bottom-cover"></div>
 							</div>
 						</div>
-						<div class="share-btn-copy">
+						<!-- <div class="share-btn-copy">
 
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="right-col options">

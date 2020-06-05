@@ -536,6 +536,10 @@ form.en__component{
 .form-field label{
     font-weight:500
 }
+.form-field.checkbox-field {
+    height: 40px;
+}
+
 .form-field input:focus+label,.form-field select:focus+label,.form-field input.filled+label,.form-field select.filled+label{
     top:22%;
     font-size:65%;
@@ -1206,6 +1210,11 @@ hr{
     font-size:1.125em;
     line-height:1.2em
 }
+/* 
+#result .left-col .content{
+    padding: 0 50px;
+} */
+
 #chart-wrapper{
     margin:0 auto
 }

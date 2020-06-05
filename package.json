@@ -6,7 +6,8 @@
   "dependencies": {
     "email-autocomplete": "^0.2.0",
     "gpea-npm-en-uploader": "greenpeace/gpea-npm-en-uploader",
-    "js-email-autocomplete": "^1.0.3"
+    "js-email-autocomplete": "^1.0.3",
+    "progressbar.js": "^1.1.0"
   },
   "devDependencies": {
     "node-sass": "^4.13.1",

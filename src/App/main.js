@@ -1,6 +1,36 @@
 import './all.css'
 import './main.scss'
-
+var ProgressBar = require('progressbar.js')
+const barTarget = 5000;
+var bar = new ProgressBar.Line('#container', {
+	strokeWidth: 4,
+	easing: 'easeInOut',
+	duration: 1400,
+	color: '#FFEA82',
+	trailColor: '#eee',
+	trailWidth: 1,
+	svgStyle: {width: '100%', height: '100%'},
+	text: {
+	  style: {
+		// Text color.
+		// Default: same as stroke color (options.color)
+		color: '#fff',
+		position: 'relative',
+		// right: '0',
+		// top: '30px',
+		// padding: 0,
+		// margin: 0,
+		transform: null,
+		value: '0',
+	  },
+	  autoStyleContainer: false
+	},
+	from: {color: '#FFEA82'},
+	to: {color: '#ED6A5A'},
+	step: (state, bar) => {
+		bar.setText(`目前連署人次 : ${Math.round(bar.value() * barTarget)} / ${barTarget}`);
+	}
+});
 /**
  * This script use the google sheet as the DB
  */
@@ -450,6 +480,28 @@ $(function(){
 		map_init: false,
 		init: function(){
 			var _ = this;
+
+			fetch(apiUrl+"?sheetName=epa", {
+				headers: {
+					// "X-Requested-With": "XMLHttpRequest"
+				}
+			})
+			.then(response => response.json())
+			.then(response => {
+				console.log('EPA')
+				// console.log(response)
+				const count = response.values.length;
+				const c = count + 600
+				_.barCount = c
+				_.barTarget = barTarget
+				// console.log(_)
+				const messageToEPA = `臺灣示範了如何應對全球疫情，我們卻沒有為氣候變遷準備，全球都在減少碳排放，那臺灣呢？\n我衷心希望臺灣成為全球首個友善環境的政府，將臺灣2030年的溫室氣體減排目標提升至45%。\n臺灣製造部門的碳排放佔全臺超過一半以上。因此，臺灣政府必須立法管制大型企業的總排放量，強制用電大戶採用至少20%的再生能源，做到減少碳排放的責任。`
+
+				$('#fake_message').val(messageToEPA);
+
+			});
+
+			
 			_.$container = $('#form');
 
 			_.$container.find('input, select').bind('change blur', function(){
@@ -555,12 +607,13 @@ $(function(){
 					let message = $('#fake_message').val().trim();
 					let last_name = $('#fake_supporter_lastName').val();
 					let email = $('#fake_supporter_emailAddress').val();
+					let opinion_submit = $('#fake_opinionSubmit').prop("checked");
 					// console.log(message);
 
-					fetch(apiUrl+"?sheetName=notes", {
+					fetch(apiUrl+"?sheetName=epa", {
 						method: 'POST',
 						body: JSON.stringify({
-							rows: [{ip:ip, message, last_name, email}]
+							rows: [{ip:ip, message, last_name, email, opinion_submit}]
 						})
 					})
 
@@ -591,6 +644,7 @@ $(function(){
 		show: function(){
 			var _ = this;
 
+			bar.animate(_.barCount / _.barTarget);
 			// tigger the blur actions to make it has `filled` class.
 			_.$container.find('input, select').each((i, el) => {
 				$(el).blur()
@@ -768,7 +822,7 @@ $(function(){
 			});
 		},
 		fetchResultMarquee: () => {
-			fetch(apiUrl+"?sheetName=notes", {
+			fetch(apiUrl+"?sheetName=notes&type=notes", {
 				headers: {
 					// "X-Requested-With": "XMLHttpRequest"
 				}
@@ -883,6 +937,7 @@ $(function(){
 			scrollTo(0,0);
 			if($('#intro').length == 1) introPage.init();
 		}, 400);
+		// pageHandler.goTo('#form', '#voting');
 
 		$(window).resize(function(){
 			if(introPage.active) introPage.resize();

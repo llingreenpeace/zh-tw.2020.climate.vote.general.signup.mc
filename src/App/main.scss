@@ -1,3 +1,39 @@
+.progress-bar-container {
+  width: 100%;
+  padding: 20px;
+  height: 80px;
+
+  // .progress-bar-outside {
+  //   border: 1px solid #f9f9f9;
+  //   height: 30px;
+  //   width: 100%;
+  //   border-radius: 10px;
+  //   position: relative;
+  //   .progress-bar-label {
+  //     position: absolute;
+  //     left: 50%;
+  //     transform: translateX(-50%);
+  //     line-height: 1.6;
+  //   }
+  //   .progress-bar-inside {
+  //     border-radius: 8px;
+  //     background-color: #fff9c4;
+  //     height: 28px;
+  //     white-space: nowrap;
+  //     width: 0;
+  //     transition: width 1s;
+  //   }
+  // }
+  #container {
+    left: 50%;
+    transform: translateX(-50%);
+    position: relative;
+    width: 80%;
+    height: 8px;
+    position: relative;
+  }
+}
+
 .hide {
   display:none !important;
 }
