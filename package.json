@@ -1,6 +1,6 @@
 {
-  "name": "zh-tw.2020.climate.ipcc.general.signup.na",
-  "homepage": "https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote/",
+  "name": "zh-tw.2020.climate.vote.general.signup.mc",
+  "homepage": "https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote.mc/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -18,10 +18,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:en": "PUBLIC_URL=https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote react-scripts build",
+    "build:en": "set PUBLIC_URL=https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote.mc&&npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "yarn run build:en && gpea-npm-en-uploader"
+    "deploy-mc": "yarn run build:en && node mc-deploy.js"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -6,13 +6,19 @@
 	<link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="theme-color" content="#000000" />
-	<meta name="description" content="Web site created using create-react-app" />
-	<link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png?v=12345" />
-	<!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
-	<title>2020 我希望臺灣優先採取的氣候行動是...</title>
+	<link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png?v=12345" />	
+	<title>2020 我希望臺灣優先採取的氣候行動是... - Greenpeace 綠色和平 | 台灣</title>
 	<meta name="description" content="節能減碳不是一個人的事！臺灣能如何扭轉氣候危機？立即分享你的想法，群策群力、守護地球！" />
 	<meta name="keywords" content="Greenpeace" />
-	<link rel="canonical" href="https://act.greenpeace.org/page/55747/petition/1" />
+
+	<meta property="og:site_name" content="Greenpeace 綠色和平" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="2020 我希望臺灣優先採取的氣候行動是..." />
+	<meta property="og:description" content="節能減碳不是一個人的事！臺灣能如何扭轉氣候危機？立即分享你的想法，群策群力、守護地球！" />
+	<meta property="og:url" content="https://cloud.greenhk.greenpeace.org/petition.climate.vote">
+	<meta property="og:image" content="%PUBLIC_URL%/img/og-petition.jpg?v=123">
+
+	<link rel="canonical" href="https://cloud.greenhk.greenpeace.org/petition.climate.vote" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 	<script src="https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1735/modernizr.min.js?v=1537757628000"></script>
 	<!-- Google Tag Manager -->
@@ -235,19 +241,15 @@
 					<div class="content">
 						<h2 class="sp-title">
 							<!-- <img src="%PUBLIC_URL%/loading.png?v=123" class="loading-image" alt="正在更新投票結果…"> -->
-							<span class="word">最後倒數！讓臺灣贏得世界的注視</span>
+							<span class="word">時間不多了，我們需要你！</span>
 						</h2>
 						<div class="progress-bar-container">
 							<div id="container"></div>
 						</div>
 						<p class="out" style="text-align: left; padding: 0 20px;">
-							無論您的選擇為何，
-							<strong>在臺灣，製造部門的碳排放量佔全臺超過一半以上，企業應該與民眾共抗全球危機</strong><br />
-							因此，應對氣候危機，當務之急是要求政府立法管制大型企業的總排放量，
-							強制用電大戶共同分擔 20% 的再生能源，與民眾一起減少碳排放。<br />
+							感謝您參與氣候議題的討論！綠色和平和您一樣關心氣候問題，在臺灣，我們積極推廣氣候教育，培養年輕一代的危機意識，並大力監督政府、遊說企業加速再生能源建置，推進臺灣能源轉型。<br />
 							<br />
-							環保署正在蒐集民間意見，作為《溫室氣體減量及管理法》的修法方向，6 月 30 日以前，
-							綠色和平要號召 5,000 位民眾<strong>一同遞交下列意見</strong>，請您留下姓名，由你決定臺灣應對氣候危機的高度。
+							遺憾的是，再多的事後問責仍趕不上環境被破壞的速度，氣候問題一日比一日嚴峻，目前綠色和平氣候專案的臺灣支持者數量僅 2,000 人，時間不多了，我們需要更多人加入，一起為環境大聲疾呼，您願意加入嗎？
 						</p>
 						<form id="fake-form">
 							<input type="hidden" name="options" value="" />
@@ -261,14 +263,14 @@
 							<div class="columns form-field name-columns">
 								<div class="column last-name">
 									<div class="form-field text-field mandatory">
-										<input id="fake_supporter_lastName" type="text" class="fake_input" name="fake.supporter.lastName" value="" required />
+										<input id="fake_supporter_lastName" type="text" class="fake_input validate-name" name="fake.supporter.lastName" value="" required />
 										<label for="fake_supporter_lastName" class="" style="">姓氏</label>
 									</div>
 									<label id="fake_supporter_lastName-error" class="error" for="fake_supporter_lastName"></label>
 								</div>
 								<div class="column first-name">
 									<div class="form-field text-field  mandatory">
-										<input id="fake_supporter_firstName" type="text" class="fake_input" name="fake.supporter.firstName" value="" required />
+										<input id="fake_supporter_firstName" type="text" class="fake_input validate-name" name="fake.supporter.firstName" value="" required />
 										<label for="fake_supporter_firstName" class="" style="">名字</label>
 									</div>
 									<label id="fake_supporter_firstName-error" class="error" for="fake_supporter_firstName"></label>
@@ -290,14 +292,14 @@
 							<label id="fake_supporter_birthYear-error" class="error" for="fake_supporter_birthYear"></label>
 
 							<div class="form-field textarea-field">
-								<textarea id="fake_message" readonly rows="8" class="fake_input fake_message" name="fake.supporter.message" placeholder="關於氣候危機，我還有話想說..."></textarea>
+								<textarea id="fake_message" rows="8" class="fake_input fake_message" name="fake.supporter.message" placeholder="關於氣候危機，我還有話想說..."></textarea>
 							</div>
 							<label id="fake_supporter_message-error" class="error" for="fake_supporter_message"></label>
 
 							<div class="en__submit">
 								<button style="" class="btn btn2">OK</button>
 							</div>
-							<div class="form-field checkbox-field">
+							<!--<div class="form-field checkbox-field">
 								<div class="checkbox">
 									<input id="fake_opinionSubmit" type="checkbox" class="fake_input" name="fake.supporter.opinionSubmit" value="" checked />
 									<div class="fake-cb"></div>
@@ -305,7 +307,7 @@
 								<label for="fake_opinionSubmit" class="" style="">
 									我同意綠色和平代我將以上意見遞交給環保署
 								</label>
-							</div>
+							</div>-->
 							<div class="form-field checkbox-field">
 								<div class="checkbox">
 									<input id="fake_optin" type="checkbox" class="fake_input" name="fake.supporter.emailOptin" value="" checked />
@@ -356,10 +358,11 @@
 				<div class="left-col">
 					<div class="content">
 						<h2 class="sp-title">
-							<!-- 謝謝你參與討論！<br>
-							其他人也想看見這些改變： -->
-							感謝您的加入！
+							謝謝你參與討論！<br>
+							其他人也想看見這些改變：
+							<!--感謝您的加入！-->
 						</h2>
+						<!--
 						<p class="out" style="text-align: left;">
 							若您於前頁勾選「我同意綠色和平代我將以上意見遞交給環保署」，
 							您將於 3 - 5 天後，收到一封來自問卷調查公司 SurveyCake 的系統通知信（如下圖），
@@ -368,12 +371,13 @@
 						<div class="content-img">
 							<img src="https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote/previews/surveycake-preview.png" alt="">
 						</div>
-						<div id="chart-wrapper" class="" style="display: none;">
+						-->
+						<div id="chart-wrapper">
 							<div id="chart">
 								<div class="lds-dual-ring"></div>
 							</div>
 						</div>
-						<div style="display: none;">
+						<div>
 							<h1>大家怎麼說？</h1>
 							<div class="marquee-top-container">
 								<div class="top-cover"></div>
@@ -393,13 +397,13 @@
 						<img class="icon2" src="https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1735/handshake.svg?v=1537757925000" alt="Thanks for sharing!">
 						<h3 class="b">馬上與朋友分享你的看法！</h3>
 						<div class="btns">
-							<a role="button" tabindex="1" class="share-btn fb-share" target="_blank" href="http://www.facebook.com/sharer.php?s=100&u=https://act.gp/2Vp03cv">
+							<a role="button" tabindex="1" class="share-btn fb-share" target="_blank" href="http://www.facebook.com/sharer.php?s=100&u=https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=facebook&utm_medium=socialorganic&utm_content=2020-climate-vote_petition_tkpage">
 								<span class="sr-text">分享到 Facebook</span>
 								<span class="icon-wrapper">
 									<i class="fab fa-facebook-square"></i>
 								</span>
 							</a>
-							<a role="button" tabindex="1" class="share-btn tt-share" target="_blank" href="https://lineit.line.me/share/ui?url=https://act.gp/2Y0aULE&text=我剛剛選出臺灣對抗氣候危機的方法了！你也來分享你的看法吧～">
+							<a role="button" tabindex="1" class="share-btn tt-share" target="_blank" href="https://lineit.line.me/share/ui?url=https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=line&utm_medium=socialorganic&utm_content=2020-climate-vote_petition_tkpage&text=我剛剛選出臺灣對抗氣候危機的方法了！你也來分享你的看法吧～">
 								<span class="sr-text">分享到 LINE</span>
 								<span class="icon-wrapper">
 									<i class="fab fa-line"></i>
@@ -424,6 +428,7 @@
 			</div>
 		</div>
 		<!--EN_FORM_STARTS-->
+		<!--
 		<form method="post" action="/page/55747/petition/2" class="en__component en__component--page">
 			<input type="hidden" name="hidden" class="en__hiddenFields" value="">
 			<input type="hidden" name="sessionId" value="1ebb5ceae2be4d859e2a8b1c71179963-server9796">
@@ -494,8 +499,14 @@
 					</div>
 				</div>
 			</div>
-		</form>
+		</form>-->
 		<!--EN_FORM_ENDS-->
+
+		<!-- MC_FORM_STARTS -->
+		<form method="post" action="https://cloud.greenhk.greenpeace.org/up-dev-endpoint" class="" id="mc-form">
+		</form>
+		<!-- MC_FORM_ENDS -->
+
 		<div id="sticky_widget">
 			<div class="logo">
 				<div class="sr-text">PRESENTED BY Greenpeace</div>
@@ -503,13 +514,13 @@
 			</div>
 			<span class="txt hidden">SHARE</span>
 			<div class="btns">
-				<a role="button" tabindex="1" class="share-btn fb-share" target="_blank" href="http://www.facebook.com/sharer.php?s=100&u=https://act.gp/2Kslfbf">
+				<a role="button" tabindex="1" class="share-btn fb-share" target="_blank" href="http://www.facebook.com/sharer.php?s=100&u=https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=facebook&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_fb_share">
 					<span class="sr-text">Facebook</span>
 					<span class="icon-wrapper">
 						<i class="fab fa-facebook-square"></i>
 					</span>
 				</a>
-				<a role="button" tabindex="1" class="share-btn tt-share" target="_blank" href="https://lineit.line.me/share/ui?url=https://act.gp/2Kn7zhU&text=我剛剛選出臺灣對抗氣候危機的方法了！你也來分享你的看法吧～">
+				<a role="button" tabindex="1" class="share-btn tt-share" target="_blank" href="https://lineit.line.me/share/ui?url=https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=line&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_line_share&text=我剛剛選出臺灣對抗氣候危機的方法了！你也來分享你的看法吧～">
 					<span class="sr-text">LINE</span>
 					<span class="icon-wrapper">
 						<i class="fab fa-line"></i>

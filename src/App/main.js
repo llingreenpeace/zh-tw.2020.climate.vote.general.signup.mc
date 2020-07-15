@@ -1,7 +1,11 @@
 import './all.css'
 import './main.scss'
-var ProgressBar = require('progressbar.js')
-const barTarget = 5000;
+var ProgressBar = require('progressbar.js');
+var barTarget = parseInt(document.querySelector('input[name="numSignupTarget"]').value, 10) || 0,
+		barNumber = parseInt(document.querySelector('input[name="numResponses"]').value, 10) || 0;
+		
+//document.getElementById("targetSpan").innerHTML = barTarget;
+
 var bar = new ProgressBar.Line('#container', {
 	strokeWidth: 4,
 	easing: 'easeInOut',
@@ -31,10 +35,37 @@ var bar = new ProgressBar.Line('#container', {
 		bar.setText(`目前連署人次 : ${Math.round(bar.value() * barTarget)} / ${barTarget}`);
 	}
 });
+
+/**
+ * Show the full page loading
+ */
+const showFullPageLoading = () => {
+	if ($("#page-loading").length===0) {
+		$("body").append(
+			`<div id="page-loading" class="hide">
+			  <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+			</div>`)
+	}
+
+	setTimeout(() => { // to enable the transition
+		$("#page-loading").removeClass("hide")
+	}, 0)
+}
+
+/**
+ * Hide the full page loading
+ */
+const hideFullPageLoading = () => {
+	$("#page-loading").addClass("hide")
+
+	setTimeout(() => {
+		$("#page-loading").remove()
+	}, 1100)
+}
+
 /**
  * This script use the google sheet as the DB
  */
-
 const {$, anime, autosize, Cookies, Highcharts, dataLayer} = window
 const apiUrl = "https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec"
 // const apiUrl = "https://cors-anywhere.small-service.gpeastasia.org/https://script.google.com/macros/s/AKfycbx_Wg8GKV7fp_hae910yvuUzjpUbrWHPvCyRTyibdQOzQtgOTo/exec" // test project
@@ -45,7 +76,7 @@ var free_text_id = 'en__field_supporter_questions_288644';
 var email_optin_id = 'en__field_supporter_questions_7276';
 var nro_data_ok_id = '';
 
-var base_url = 'https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote/options/';  //cdn url
+var base_url = 'https://change.greenpeace.org.tw/2020/petition/zh-tw.2020.climate.vote.mc/options/';  //cdn url
 var resultData = [
 	// 'name', 'y', 'color'
 	["減碳目標再翻新"	        ,25, '#FEA47F'],
@@ -74,8 +105,8 @@ fetch(apiUrl+"?sheetName=notes", {
 }).then(response => response.json())
 	.then(response => {
 		if (response.status==="OK") {
-			initVotingPageMarquee(response.values);
-			// initResultPageMarquee(response.values);
+			initVotingPageMarquee(response.values);			
+			//initResultPageMarquee(response.values);
 		} else {
 			console.error("Cannot fetch the pulling results")
 		}
@@ -92,7 +123,7 @@ const initVotingPageMarquee = (values) => {
 	let htmlString = '';
 	for(let index in result) {
 		let item = result[index];
-		htmlString += `<strong>${item.last_name}***</strong>:“${item.message.trim()}” &nbsp;`;
+		htmlString += `<strong>${item.last_name}***</strong>:“${item.message.toString().trim()}” &nbsp;`;
 		if ((index + 1) % 3 === 0) {
 			htmlString += ` 立即投票，留下想說的話 &nbsp; `;
 		}
@@ -109,14 +140,15 @@ const initVotingPageMarquee = (values) => {
 const initResultPageMarquee = (values) => {
 	let result = values.newest20.reverse();
 	// console.log(values);
-	// console.log(result);
+	//console.log(result);
 	let htmlString = '';
 	for(let index in result) {
 		let item = result[index];
-		htmlString += `<strong>${item.last_name}***</strong>:“${item.message.trim()}” <br><br>`;
+		htmlString += `<strong>${item.last_name}***</strong>:“${item.message.toString().trim()}” <br><br>`;
 	}
+	//console.log(htmlString);
 	$('#result-page-marquee').html(htmlString);
-	$('.marquee-top-container').fadeIn();
+	$('.marquee-top-container').fadeIn();	
 }
 const shuffleArray =(array) => {
     for (var i = array.length - 1; i > 0; i--) {
@@ -166,11 +198,11 @@ const gtmTrack = ({category, action, label, value}) => {
 window.share = (page) => {
 	// WEB SHARE API
 
-	var url = "https://act.greenpeace.org/page/55747/petition/1?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_social_share";
-	var FBShareUrl = "https://act.gp/2Kslfbf";
+	var url = "https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_social_share";
+	var FBShareUrl = "https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=facebook&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_fb_share";
 	if (page === "tkpage") {
-		url = "https://act.greenpeace.org/page/55747/petition/1?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_petition_tkpage";
-		FBShareUrl = "https://act.gp/2Vp03cv";
+		url = "https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_petition_tkpage";
+		FBShareUrl = "https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=facebook&utm_medium=socialorganic&utm_content=2020-climate-vote_petition_tkpage";
 	}
 
 	if (navigator.share) {
@@ -187,7 +219,7 @@ window.share = (page) => {
 		// provide a fallback here
 		var baseURL = "https://www.facebook.com/sharer/sharer.php";
 		// var u = FBShareUrl;
-		console.log('open', baseURL + "?u=" + encodeURIComponent(FBShareUrl))
+		//console.log('open', baseURL + "?u=" + encodeURIComponent(FBShareUrl))
 		window.open(
 			baseURL + "?u=" + encodeURIComponent(FBShareUrl),
 			"_blank"
@@ -283,7 +315,7 @@ $(function(){
 			// handle click submit voting
 			_.$container.find('.next-btn').click(function(e){
 				e.preventDefault();
-
+			
 				// collect picked options
 				let chosens = []
 				_.$container.find('.vote-btn.checked').each(function(k,v) {
@@ -490,18 +522,17 @@ $(function(){
 			.then(response => {
 				console.log('EPA')
 				// console.log(response)
+				/*
 				const count = response.values.length;
 				const c = count + 600
 				_.barCount = c
-				_.barTarget = barTarget
+				_.barTarget = barTarget*/
+
 				// console.log(_)
-				const messageToEPA = `臺灣示範了如何應對全球疫情，我們卻沒有為氣候變遷準備，全球都在減少碳排放，那臺灣呢？\n我衷心希望臺灣成為全球首個友善環境的政府，將臺灣2030年的溫室氣體減排目標提升至45%。\n臺灣製造部門的碳排放佔全臺超過一半以上。因此，臺灣政府必須立法管制大型企業的總排放量，強制用電大戶採用至少20%的再生能源，做到減少碳排放的責任。`
-
-				$('#fake_message').val(messageToEPA);
-
+				//const messageToEPA = `臺灣示範了如何應對全球疫情，我們卻沒有為氣候變遷準備，全球都在減少碳排放，那臺灣呢？\n我衷心希望臺灣成為全球首個友善環境的政府，將臺灣2030年的溫室氣體減排目標提升至45%。\n臺灣製造部門的碳排放佔全臺超過一半以上。因此，臺灣政府必須立法管制大型企業的總排放量，強制用電大戶採用至少20%的再生能源，做到減少碳排放的責任。`
+				//$('#fake_message').val(messageToEPA);
 			});
-
-			
+						
 			_.$container = $('#form');
 
 			_.$container.find('input, select').bind('change blur', function(){
@@ -533,7 +564,7 @@ $(function(){
 			// create the year options
 			let currYear = new Date().getFullYear()
 			for (var i = 0; i < 80; i++) {
-				let option = `<option value="01/01/${currYear-i}">${currYear-i}</option>`
+				let option = `<option value="${currYear-i}-01-01">${currYear-i}</option>`
 
 				$("#fake_supporter_birthYear").append(option);
 				$('#en__field_supporter_NOT_TAGGED_6').append(option);
@@ -542,20 +573,31 @@ $(function(){
 			$.validator.addMethod( //override email with django email validator regex - fringe cases: "user@admin.state.in..us" or "name@website.a"
 				'email',
 				function(value, element){
-						return this.optional(element) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/i.test(value);
+						return this.optional(element) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/i.test(value);						
 				},
 				'Email 格式錯誤'
+			);
+			
+			$.validator.addMethod(
+				'validate-name',
+				function(value, element){
+					return this.optional(element) || /^[\u4e00-\u9fa5_a-zA-Z_ ]{1,40}$/i.test(value);
+				},
+				'格式不正確，請不要輸入數字或符號'
 			);
 
 			$.validator.addMethod(
 				"taiwan-phone",
 				function (value, element) {
 					// console.log('do validate')
-					console.log('phone required :', $('#fake_supporter_phoneNumber').prop('required'));
+					//console.log('phone required :', $('#fake_supporter_phoneNumber').prop('required'));
+					const phoneReg6 = new RegExp(/^(0|886|\+886)?(9\d{8})$/).test(value);
+					const phoneReg7 = new RegExp(/^(0|886|\+886){1}[2-8]-?\d{6,8}$/).test(value);
+
 					if ($('#fake_supporter_phoneNumber').prop('required')) {
-						return this.optional(element) || /^[\d \-+]{7,15}$/i.test(value);
+						return this.optional(element) || phoneReg6 || phoneReg7;
 					} else if ($('#fake_supporter_phoneNumber').val()) {
-						return this.optional(element) || /^[\d \-+]{7,15}$/i.test(value);
+						return this.optional(element) || phoneReg6 || phoneReg7;
 					}
 					return true
 				},
@@ -570,6 +612,8 @@ $(function(){
 					element.parents("div.form-field:first").after( error );
 				},
 				submitHandler: function(form) {
+					showFullPageLoading();
+
 					// do other things for a valid form
 					var temp = [];
 
@@ -579,29 +623,82 @@ $(function(){
 					});
 
 					// Cookies.set('checked_options', temp);
-					console.log('en__field_supporter_questions_288643', temp.join())
-					$('#'+options_id).val(temp.join());
-					$('#en__field_supporter_firstName').val($('#fake_supporter_firstName').val());
-					$('#en__field_supporter_lastName').val($('#fake_supporter_lastName').val());
-					$('#en__field_supporter_emailAddress').val($('#fake_supporter_emailAddress').val());
+					//console.log('en__field_supporter_questions_288643', temp.join())
+					//多的欄位
+					//$('#'+options_id).val(temp.join());
+
+					// mc forms
+					$('#mc-form [name="FirstName"]').val($('#fake_supporter_firstName').val());
+					$('#mc-form [name="LastName"]').val($('#fake_supporter_lastName').val());
+					$('#mc-form [name="Email"]').val($('#fake_supporter_emailAddress').val());
 
 					if (!$('#fake_supporter_phoneNumber').prop('required') && !$('#fake_supporter_phoneNumber').val()) {
-						$('#en__field_supporter_phoneNumber').val('0900000000');
+						$('#mc-form [name="MobilePhone"]').val('0900000000');
 					} else {
-						$('#en__field_supporter_phoneNumber').val($('#fake_supporter_phoneNumber').val());
+						$('#mc-form [name="MobilePhone"]').val($('#fake_supporter_phoneNumber').val());
 					}
-					$('#en__field_supporter_NOT_TAGGED_6').val($('#fake_supporter_birthYear').val());
-
+					$('#mc-form [name="Birthdate"]').val($('#fake_supporter_birthYear').val());
+										
 					if(document.getElementById('fake_optin').checked) {
-						$('#'+email_optin_id).prop( "checked", true );
+						$('#mc-form [name="OptIn"]').eq(0).prop( "checked", true );
 					} else {
-						$('#'+email_optin_id).prop( "checked", false );
+						$('#mc-form [name="OptIn"]').eq(0).prop( "checked", false );
 					}
+					/* 多的欄位
 					if($('#fake_local_optin').length>0 && document.getElementById('fake_local_optin').checked) {
 						$('#'+nro_data_ok_id).prop( "checked", true ).prop("disabled", false);
 					} else {
 						$('#'+nro_data_ok_id).prop( "checked", false );
-					}
+					}*/
+
+					//$("form.en__component--page").submit();
+					// collect values in the mc form
+					let formData = new FormData();
+					$("#mc-form input").each(function (idx, el) {
+						let v = null
+						if (el.type==="checkbox") {
+							v = el.checked
+						} else {
+							v = el.value
+						}
+
+						formData.append(el.name, v)
+						//console.log("Use", el.name, v)
+					});
+					
+					// send the request			
+					let postUrl = $("#mc-form").prop("action");
+					fetch(postUrl, {
+						method: 'POST',
+						body: formData
+					})
+					.then(response => response.json())
+					.then(response => {
+						//console.log('fetch response', response);
+						
+						if (response) {
+							if (response.Supporter) { // ok, go to next page
+								//sendPetitionTracking("2020-oceans_sanctuaries");
+								gtmTrack({
+									'category': 'petitions',
+									'action': 'signup',
+									'label': '2020-climate-vote'									
+								});
+							}
+
+							pageHandler.goTo('#result', '#form');
+							resultPage.init();
+
+							hideFullPageLoading();
+							//changeToPage(2);													
+						}
+					})
+					.catch(error => {
+						hideFullPageLoading();
+						alert(error);
+						console.warn("fetch error");
+						console.error(error);
+					});
 
 					// handling opinion submit
 					let message = $('#fake_message').val().trim();
@@ -616,8 +713,6 @@ $(function(){
 							rows: [{ip:ip, message, last_name, email, opinion_submit}]
 						})
 					})
-
-					$("form.en__component--page").submit();
 
 				},
 				invalidHandler: function(event, validator) {
@@ -643,6 +738,9 @@ $(function(){
 		},
 		show: function(){
 			var _ = this;
+
+			_.barCount = barNumber;
+			_.barTarget = barTarget;
 
 			bar.animate(_.barCount / _.barTarget);
 			// tigger the blur actions to make it has `filled` class.
@@ -750,7 +848,7 @@ $(function(){
 		renderChart: () => {
 			// read choosed options
 			let chosens = JSON.parse(localStorage.getItem('choosed_options') || "[]");
-			console.log('Use Chart Data', resultData)
+			//console.log('Use Chart Data', resultData)
 
 			Highcharts.chart('chart', {
 				chart: {
@@ -828,7 +926,7 @@ $(function(){
 				}
 			}).then(response => response.json())
 				.then(response => {
-					if (response.status==="OK") {
+					if (response.status==="OK") {						
 						initResultPageMarquee(response.values);
 					} else {
 						console.error("Cannot fetch the pulling results")
@@ -924,7 +1022,7 @@ $(function(){
 
 	// resolve which the current page is
 	const EN_PAGE_STATUS = resolveEnPagePetitionStatus()
-	console.log("EN_PAGE_STATUS", EN_PAGE_STATUS)
+	//console.log("EN_PAGE_STATUS", EN_PAGE_STATUS)
 	if (EN_PAGE_STATUS==="FRESH") {
 	// if (false) {
 		if($('#voting').length == 1){
