@@ -1,40 +1,10 @@
 import './all.css'
 import './main.scss'
 var ProgressBar = require('progressbar.js');
-var barTarget = parseInt(document.querySelector('input[name="numSignupTarget"]').value, 10) || 0,
-		barNumber = parseInt(document.querySelector('input[name="numResponses"]').value, 10) || 0;
-		
-//document.getElementById("targetSpan").innerHTML = barTarget;
+var barTarget = 0;
+var barNumber = 0;
 
-var bar = new ProgressBar.Line('#container', {
-	strokeWidth: 4,
-	easing: 'easeInOut',
-	duration: 1400,
-	color: '#FFEA82',
-	trailColor: '#eee',
-	trailWidth: 1,
-	svgStyle: {width: '100%', height: '100%'},
-	text: {
-	  style: {
-		// Text color.
-		// Default: same as stroke color (options.color)
-		color: '#fff',
-		position: 'relative',
-		// right: '0',
-		// top: '30px',
-		// padding: 0,
-		// margin: 0,
-		transform: null,
-		value: '0',
-	  },
-	  autoStyleContainer: false
-	},
-	from: {color: '#FFEA82'},
-	to: {color: '#ED6A5A'},
-	step: (state, bar) => {
-		bar.setText(`目前連署人次 : ${Math.round(bar.value() * barTarget)} / ${barTarget}`);
-	}
-});
+//document.getElementById("targetSpan").innerHTML = barTarget;
 
 /**
  * Show the full page loading
@@ -61,6 +31,32 @@ const hideFullPageLoading = () => {
 	setTimeout(() => {
 		$("#page-loading").remove()
 	}, 1100)
+}
+
+/**
+ * Hide the donatin btn in DD page
+ */
+const hideDdBtn = () => {
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	if (urlParams.get('utm_source') === "dd") {
+		$('.is-hidden-at-dd-page-only').hide();
+
+		$('#fake_supporter_phoneNumber').removeAttr("required"); //移除電話欄位 required Attr		
+	}
+}
+
+/**
+ * Show the submitted error message 
+ */
+const showSubmittedError = () => {
+	if ($("#submitted-error").length === 0) {
+		$("body").append(`<div id="submitted-error">抱歉，連署時發生問題，請稍後再嘗試</div>`);		
+	}
+	
+	$("#submitted-error").click(function() {
+		$('#submitted-error').remove();
+	});
 }
 
 /**
@@ -193,16 +189,21 @@ const gtmTrack = ({category, action, label, value}) => {
 		'contentName': label,
 		'value': value
 	});
+
+	//if (action === 'signup') {
+		window.uetq = window.uetq || [];  
+		window.uetq.push ('event', action, {'event_category': category, 'event_label': label, 'event_value': 0});
+	//}
 }
 
 window.share = (page) => {
 	// WEB SHARE API
 
-	var url = "https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_social_share";
-	var FBShareUrl = "https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=facebook&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_fb_share";
+	var url = "https://cloud.greentw.greenpeace.org/petition-climate-vote?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_social_share";
+	var FBShareUrl = "https://cloud.greentw.greenpeace.org/petition-climate-vote?utm_campaign=2020-climate-vote&utm_source=facebook&utm_medium=socialorganic&utm_content=2020-climate-vote_footer_fb_share";
 	if (page === "tkpage") {
-		url = "https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_petition_tkpage";
-		FBShareUrl = "https://cloud.greenhk.greenpeace.org/petition.climate.vote?utm_campaign=2020-climate-vote&utm_source=facebook&utm_medium=socialorganic&utm_content=2020-climate-vote_petition_tkpage";
+		url = "https://cloud.greentw.greenpeace.org/petition-climate-vote?utm_campaign=2020-climate-vote&utm_source=socialshare&utm_medium=socialorganic&utm_content=2020-climate-vote_petition_tkpage";
+		FBShareUrl = "https://cloud.greentw.greenpeace.org/petition-climate-vote?utm_campaign=2020-climate-vote&utm_source=facebook&utm_medium=socialorganic&utm_content=2020-climate-vote_petition_tkpage";
 	}
 
 	if (navigator.share) {
@@ -212,8 +213,7 @@ window.share = (page) => {
 				title: "2020 我希望臺灣優先採取的氣候行動是...",
 				text: "節能減碳不是一個人的事！臺灣能如何扭轉氣候危機？立即分享你的想法，群策群力、守護地球！",
 				url: url
-			})
-			.then(() => console.log("Successfully shared"))
+			})			
 			.catch(error => console.log("Error sharing:", error));
 	} else {
 		// provide a fallback here
@@ -512,7 +512,11 @@ $(function(){
 		map_init: false,
 		init: function(){
 			var _ = this;
-
+			
+			// https://docs.google.com/spreadsheets/d/1XBYWec9H79G0titBfH4qil5ZcIlwSNasx2yzohULMEA/edit#gid=361086740
+			// 檢查 email 的簽署是看 epa 這張表格			
+			// user 收到的感謝信裡面會有個 cloud function link 帶變數 user email，然後先去檢查 epa speadsheet 有沒有資料 
+			// 沒有資料或序號提領完畢的話就 return message 而已，有序號可以提領就轉址的影片所屬的網站
 			fetch(apiUrl+"?sheetName=epa", {
 				headers: {
 					// "X-Requested-With": "XMLHttpRequest"
@@ -520,7 +524,7 @@ $(function(){
 			})
 			.then(response => response.json())
 			.then(response => {
-				console.log('EPA')
+				//console.log('EPA')
 				// console.log(response)
 				/*
 				const count = response.values.length;
@@ -601,10 +605,49 @@ $(function(){
 					}
 					return true
 				},
-				"電話格式不正確，請只輸入數字 0912345678 或 02-12345678")
+				"電話格式不正確，請只輸入數字 0912345678 或 02-12345678");			
 
 			$.validator.addClassRules({ // connect it to a css class
 				"taiwan-phone" : { "taiwan-phone" : true }
+			});
+			
+			//email suggestion, for email correctness
+			let domains = [
+				"me.com",
+				"outlook.com",
+				"netvigator.com",
+				"cloud.com",
+				"live.hk",
+				"msn.com",
+				"gmail.com",
+				"hotmail.com",
+				"ymail.com",
+				"yahoo.com",
+				"yahoo.com.tw",
+				"yahoo.com.hk"
+			];
+			let topLevelDomains = ["com", "net", "org"];
+
+			var Mailcheck = require('mailcheck');
+			$("#fake_supporter_emailAddress").on('blur', function() {	
+				if ($('.email-suggestion').length === 0) {	
+					Mailcheck.run({
+						email: $("#fake_supporter_emailAddress").val(),
+						domains: domains, // optional
+						topLevelDomains: topLevelDomains, // optional
+						suggested: (suggestion) => {
+							$(`<div class="email-suggestion" style="text-align:left; font-size:small; color:blue;">您想輸入的是 <strong id="emailSuggestion">${suggestion.full}</strong> 嗎？</div>`).insertAfter("#fake_supporter_emailAddress");					
+							
+							$(".email-suggestion").click(function() {
+								$("#fake_supporter_emailAddress").val($('#emailSuggestion').html());
+								$('.email-suggestion').remove();
+							});
+						},
+						empty: () => {
+							this.emailSuggestion = null
+						}
+					});	
+				}					
 			});
 
 			$("#fake-form").validate({
@@ -695,9 +738,7 @@ $(function(){
 					})
 					.catch(error => {
 						hideFullPageLoading();
-						alert(error);
-						console.warn("fetch error");
-						console.error(error);
+						showSubmittedError();
 					});
 
 					// handling opinion submit
@@ -720,7 +761,7 @@ $(function(){
 					var errors = validator.numberOfInvalids();
 					if (errors) {
 						// console.log(errors)
-						var message = errors == 1
+						var message = errors === 1
 							? 'You missed 1 field. It has been highlighted'
 							: 'You missed ' + errors + ' fields. They have been highlighted';
 						$("div.error").show();
@@ -738,11 +779,51 @@ $(function(){
 		},
 		show: function(){
 			var _ = this;
+			
+			barTarget = document.querySelector('input[name="numSignupTarget"]') ? parseInt(document.querySelector('input[name="numSignupTarget"]').value, 10) : 0;
+			barNumber = document.querySelector('input[name="numResponses"]') ? parseInt(document.querySelector('input[name="numResponses"]').value, 10) : 0;	
+			
+			if (isNaN(barNumber) || barNumber < 117803)
+				barNumber += 117803;
+			if (isNaN(barTarget) || barTarget < 150000)
+				barTarget = 150000;
+			if (barNumber > barTarget)
+				barTarget = Math.ceil(barNumber / 10000) * 10000;		
+			
+			var bar = new ProgressBar.Line('#container', {
+				strokeWidth: 4,
+				easing: 'easeInOut',
+				duration: 1400,
+				color: '#FFEA82',
+				trailColor: '#eee',
+				trailWidth: 1,
+				svgStyle: {width: '100%', height: '100%'},
+				text: {
+				  style: {
+					// Text color.
+					// Default: same as stroke color (options.color)
+					color: '#fff',
+					position: 'relative',
+					// right: '0',
+					// top: '30px',
+					// padding: 0,
+					// margin: 0,
+					transform: null,
+					value: '0',
+				  },
+				  autoStyleContainer: false
+				},
+				from: {color: '#FFEA82'},
+				to: {color: '#ED6A5A'},
+				step: (state, bar) => {
+					bar.setText(`目前連署人次 : ${Math.round(bar.value() * barTarget).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} / ${barTarget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`);
+				}
+			});
 
 			_.barCount = barNumber;
 			_.barTarget = barTarget;
-
-			bar.animate(_.barCount / _.barTarget);
+			//console.log(_.barCount + "--" + _.barTarget);
+			bar.animate(barNumber / barTarget);
 			// tigger the blur actions to make it has `filled` class.
 			_.$container.find('input, select').each((i, el) => {
 				$(el).blur()
@@ -830,10 +911,10 @@ $(function(){
 					if (response.status==="OK") {
 						_.chartDateFetched = true;
 
-						let rows = response.values,
-							header = rows.shift() // should be ["key", "summary"]
+						let rows = response.values;
+							//header = rows.shift() // should be ["key", "summary"]
 
-						let chartData = []
+						//let chartData = []
 						rows.forEach(row => {
 							let foundIdx = resultData.findIndex(chartRow => chartRow[0]===row[0])
 							if (foundIdx>-1) {
@@ -920,11 +1001,8 @@ $(function(){
 			});
 		},
 		fetchResultMarquee: () => {
-			fetch(apiUrl+"?sheetName=notes&type=notes", {
-				headers: {
-					// "X-Requested-With": "XMLHttpRequest"
-				}
-			}).then(response => response.json())
+			fetch(apiUrl+"?sheetName=notes&type=notes")
+				.then(response => response.json())
 				.then(response => {
 					if (response.status==="OK") {						
 						initResultPageMarquee(response.values);
@@ -1025,7 +1103,7 @@ $(function(){
 	//console.log("EN_PAGE_STATUS", EN_PAGE_STATUS)
 	if (EN_PAGE_STATUS==="FRESH") {
 	// if (false) {
-		if($('#voting').length == 1){
+		if($('#voting').length === 1){
 			votingPage.init();
 			formPage.init();
 		}
@@ -1033,7 +1111,7 @@ $(function(){
 		scrollTo(0,0);
 		setTimeout(function(){
 			scrollTo(0,0);
-			if($('#intro').length == 1) introPage.init();
+			if($('#intro').length === 1) introPage.init();
 		}, 400);
 		// pageHandler.goTo('#form', '#voting');
 
@@ -1045,4 +1123,6 @@ $(function(){
 		pageHandler.goTo('#result', '#intro');
 		resultPage.init();
 	}
+
+	hideDdBtn();
 });
