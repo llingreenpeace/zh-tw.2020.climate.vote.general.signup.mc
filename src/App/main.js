@@ -674,12 +674,7 @@ $(function(){
 					$('#mc-form [name="FirstName"]').val($('#fake_supporter_firstName').val());
 					$('#mc-form [name="LastName"]').val($('#fake_supporter_lastName').val());
 					$('#mc-form [name="Email"]').val($('#fake_supporter_emailAddress').val());
-
-					if (!$('#fake_supporter_phoneNumber').prop('required') && !$('#fake_supporter_phoneNumber').val()) {
-						$('#mc-form [name="MobilePhone"]').val('0900000000');
-					} else {
-						$('#mc-form [name="MobilePhone"]').val($('#fake_supporter_phoneNumber').val());
-					}
+					$('#mc-form [name="MobilePhone"]').val($('#fake_supporter_phoneNumber').val());
 					$('#mc-form [name="Birthdate"]').val($('#fake_supporter_birthYear').val());
 										
 					if(document.getElementById('fake_optin').checked) {
