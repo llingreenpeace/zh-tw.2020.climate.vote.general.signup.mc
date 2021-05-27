@@ -567,7 +567,7 @@ $(function(){
 
 			// create the year options
 			let currYear = new Date().getFullYear()
-			for (var i = 0; i < 80; i++) {
+			for (var i = 0; i < 100; i++) {
 				let option = `<option value="${currYear-i}-01-01">${currYear-i}</option>`
 
 				$("#fake_supporter_birthYear").append(option);
@@ -596,12 +596,13 @@ $(function(){
 					// console.log('do validate')
 					//console.log('phone required :', $('#fake_supporter_phoneNumber').prop('required'));
 					const phoneReg6 = new RegExp(/^(0|886|\+886)?(9\d{8})$/).test(value);
-					const phoneReg7 = new RegExp(/^(0|886|\+886){1}[2-8]-?\d{6,8}$/).test(value);
+					const phoneReg7 = new RegExp(/^(0|886|\+886){1}[3-8]-?\d{6,8}$/).test(value);
+					const phoneReg8 = new RegExp(/^(0|886|\+886){1}[2]-?\d{8}$/).test(value);
 
 					if ($('#fake_supporter_phoneNumber').prop('required')) {
-						return this.optional(element) || phoneReg6 || phoneReg7;
+						return this.optional(element) || phoneReg6 || phoneReg7 || phoneReg8;
 					} else if ($('#fake_supporter_phoneNumber').val()) {
-						return this.optional(element) || phoneReg6 || phoneReg7;
+						return this.optional(element) || phoneReg6 || phoneReg7 || phoneReg8;
 					}
 					return true
 				},
